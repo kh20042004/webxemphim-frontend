@@ -142,7 +142,7 @@ registerForm.addEventListener('submit', async (e) => {
             localStorage.setItem('user', JSON.stringify(response.data.user || {}));
             alert('Đăng ký thành công! Vui lòng đăng nhập.');
             // Redirect to login page
-            window.location.href = '/src/pages/login.html';
+            window.location.href = '/login.html';
         } else if (response && response.message) {
             // Handle specific error messages
             if (response.message.includes('email')) {
@@ -177,7 +177,7 @@ registerForm.addEventListener('submit', async (e) => {
 googleRegisterBtn.addEventListener('click', (e) => {
     e.preventDefault();
     // Redirect to backend Google OAuth endpoint
-    window.location.href = 'http://localhost:5000/api/auth/google';
+    window.location.href = 'http://localhost:3000/api/auth/google';
 });
 
 // ============================================

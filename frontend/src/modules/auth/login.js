@@ -2,6 +2,64 @@
    LOGIN PAGE LOGIC
    ============================================ */
 
+// ============================================
+// HANDLE GOOGLE OAUTH CALLBACK - EXTRACT TOKEN FROM URL
+// ============================================
+function handleGoogleCallback() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    
+    if (token) {
+        console.log('✅ Token từ Google callback:', token);
+        
+        // Lưu token vào localStorage
+        localStorage.setItem('token', token);
+        
+        // Bỏ token khỏi URL (clean up)
+        window.history.replaceState({}, document.title, window.location.pathname);
+        
+        // Fetch user data từ backend
+        fetchUserData(token);
+    }
+}
+
+// Hàm fetch user data từ token
+async function fetchUserData(token) {
+    try {
+        const response = await fetch('http://localhost:3000/api/auth/me', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.data) {
+                localStorage.setItem('user', JSON.stringify(data.data));
+                console.log('✅ User data saved:', data.data);
+                
+                // Redirect to home page
+                alert('Đăng nhập với Google thành công!');
+                window.location.href = '/';
+            }
+        } else {
+            console.error('❌ Failed to fetch user data:', response.statusText);
+            alert('Lỗi khi lấy dữ liệu người dùng');
+        }
+    } catch (error) {
+        console.error('❌ Fetch user error:', error);
+        alert('Lỗi kết nối. Vui lòng thử lại.');
+    }
+}
+
+// Gọi hàm khi page load
+document.addEventListener('DOMContentLoaded', () => {
+    handleGoogleCallback();
+    loadRememberedEmail();
+});
+
 const loginForm = document.getElementById('loginForm');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
@@ -9,6 +67,21 @@ const emailError = document.getElementById('emailError');
 const passwordError = document.getElementById('passwordError');
 const loadingSpinner = document.getElementById('loadingSpinner');
 const googleLoginBtn = document.getElementById('googleLoginBtn');
+
+// ============================================
+// LOAD REMEMBERED EMAIL
+// ============================================
+function loadRememberedEmail() {
+    const savedEmail = localStorage.getItem('rememberEmail');
+    const rememberMeCheckbox = document.getElementById('rememberMe');
+    
+    if (savedEmail) {
+        emailInput.value = savedEmail;
+        if (rememberMeCheckbox) {
+            rememberMeCheckbox.checked = true;
+        }
+    }
+}
 
 // ============================================
 // FORM VALIDATION
@@ -111,7 +184,7 @@ loginForm.addEventListener('submit', async (e) => {
 googleLoginBtn.addEventListener('click', (e) => {
     e.preventDefault();
     // Redirect to backend Google OAuth endpoint
-    window.location.href = 'http://localhost:5000/api/auth/google';
+    window.location.href = 'http://localhost:3000/api/auth/google';
 });
 
 // ============================================
@@ -262,7 +335,7 @@ forgotPasswordForm.addEventListener('submit', async (e) => {
     sendCodeBtn.textContent = 'Đang gửi...';
 
     try {
-        const response = await fetch('http://localhost:5000/api/auth/forgot-password', {
+        const response = await fetch('http://localhost:3000/api/auth/forgot-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
@@ -320,7 +393,7 @@ resetPasswordForm.addEventListener('submit', async (e) => {
     resetBtn.textContent = 'Đang đặt lại...';
 
     try {
-        const response = await fetch('http://localhost:5000/api/auth/reset-password', {
+        const response = await fetch('http://localhost:3000/api/auth/reset-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

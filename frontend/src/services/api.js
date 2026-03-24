@@ -3,7 +3,7 @@
    ============================================ */
 
 // Use hardcoded URL for vanilla JS browser environment
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'http://localhost:3000/api';
 
 // ============================================
 // HELPER FUNCTION: Make API Requests
