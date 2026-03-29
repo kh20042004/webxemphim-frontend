@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FPT Play - Xem phim</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar-left">
+      <div class="logo">▶ FPT Play</div>
+      <nav class="nav-links">
+        <a href="/">Trang chủ</a>
+        <a href="#">Phim bộ</a>
+        <a href="#">TV show</a>
+        <a href="#">Thiếu nhi</a>
+        <a href="#">Thể thao</a>
+      </nav>
+    </div>
+    <div class="navbar-right">
+      <div class="search-box">
+        <input type="text" placeholder="Tìm phim, diễn viên...">
+      </div>
+      <a class="nav-button vip" href="#">Gói Vip</a>
+      <div class="account-icon">👤</div>
+    </div>
+  </header>
+
+  <main class="watch-page">
+    <section class="hero">
+      <img class="hero-bg" src="<%= movie.image %>" alt="<%= movie.title %>">
+      <div class="hero-content">
+        <div class="hero-badge">Phim chiếu rạp</div>
+        <h1 class="hero-title"><%= movie.title %></h1>
+        <p class="hero-desc"><%= movie.description %></p>
+        <div class="hero-actions">
+          <a href="#video-player" class="btn-play">Xem ngay</a>
+          <a href="/" class="btn-secondary">⬅ Trang chủ</a>
+        </div>
+        <div class="hero-thumbs">
+          <% movies.filter((_, index) => index !== id).slice(0, 4).forEach((thumb) => { %>
+            <a href="/watch/<%= thumb.id %>"><img src="<%= thumb.image %>" alt="<%= thumb.title %>"></a>
+          <% }) %>
+        </div>
+      </div>
+    </section>
+
+    <section class="video-section" id="video-player">
+      <div class="video-card">
+        <div class="video-header">
+          <div>
+            <span class="label">Đang phát</span>
+            <h2><%= movie.title %></h2>
+          </div>
+          <span class="video-duration">2h 14m</span>
+        </div>
+        <video controls autoplay muted poster="<%= movie.image %>">
+          <source src="<%= movie.video %>" type="video/mp4">
+          Trình duyệt của bạn không hỗ trợ thẻ video.
+        </video>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
