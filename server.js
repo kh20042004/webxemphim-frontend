@@ -23,6 +23,31 @@ app.get('/register.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/src/pages/register.html'));
 });
 
+// Direct access to profile.html
+app.get('/profile.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/src/pages/profile.html'));
+});
+
+// Direct access to history.html
+app.get('/history.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/src/pages/history.html'));
+});
+
+// Direct access to favorites.html
+app.get('/favorites.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/src/pages/favorites.html'));
+});
+
+// Direct access to subscription.html
+app.get('/subscription.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/src/pages/subscription.html'));
+});
+
+// Direct access to settings.html
+app.get('/settings.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/src/pages/settings.html'));
+});
+
 // ==================== ROOT & FALLBACK ROUTES ====================
 // Serve login page cho root /
 app.get('/', (req, res) => {

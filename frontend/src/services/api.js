@@ -11,10 +11,12 @@ const API_BASE_URL = 'http://localhost:3000/api';
 
 async function apiRequest(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
-    const headers = {
-        'Content-Type': 'application/json',
-        ...options.headers,
-    };
+    const headers = { ...options.headers };
+
+    // Don't set Content-Type for FormData (browser will set it with boundary)
+    if (!(options.body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+    }
 
     // Include token if available
     const token = localStorage.getItem('token');
@@ -85,22 +87,38 @@ async function getCurrentUserAPI() {
 // USER ENDPOINTS
 // ============================================
 
-// GET /api/user/profile
+// GET /api/users/profile
 async function getUserProfileAPI() {
-    return apiRequest('/user/profile');
+    return apiRequest('/users/profile');
 }
 
-// PUT /api/user/profile
+// PUT /api/users/profile
 async function updateProfileAPI(userData) {
-    return apiRequest('/user/profile', {
+    return apiRequest('/users/profile', {
         method: 'PUT',
         body: JSON.stringify(userData),
     });
 }
 
-// PUT /api/user/password
+// PUT /api/users/settings
+async function updateSettingsAPI(preferences) {
+    return apiRequest('/users/settings', {
+        method: 'PUT',
+        body: JSON.stringify({ preferences }),
+    });
+}
+
+// POST /api/users/avatar
+async function uploadAvatarAPI(formData) {
+    return apiRequest('/users/avatar', {
+        method: 'POST',
+        body: formData,
+    });
+}
+
+// PUT /api/users/password
 async function changePasswordAPI(passwordData) {
-    return apiRequest('/user/password', {
+    return apiRequest('/users/password', {
         method: 'PUT',
         body: JSON.stringify(passwordData),
     });
@@ -202,11 +220,24 @@ async function saveWatchHistoryAPI(historyData) {
 // SUBSCRIPTION ENDPOINTS
 // ============================================
 
-// POST /api/subscribe
+// POST /api/users/subscribe
 async function subscribeAPI(subscriptionData) {
-    return apiRequest('/subscribe', {
+    return apiRequest('/users/subscribe', {
         method: 'POST',
         body: JSON.stringify(subscriptionData),
+    });
+}
+
+// GET /api/users/favorites
+async function getFavoritesAPI() {
+    return apiRequest('/users/favorites');
+}
+
+// POST /api/users/favorites/toggle
+async function toggleFavoriteAPI(movieId) {
+    return apiRequest('/users/favorites/toggle', {
+        method: 'POST',
+        body: JSON.stringify({ movieId }),
     });
 }
 
@@ -285,6 +316,8 @@ const API = {
     // User
     getUserProfile: getUserProfileAPI,
     updateProfile: updateProfileAPI,
+    updateSettings: updateSettingsAPI,
+    uploadAvatar: uploadAvatarAPI,
     changePassword: changePasswordAPI,
 
     // Movies
@@ -308,6 +341,10 @@ const API = {
     // History
     getWatchHistory: getWatchHistoryAPI,
     saveWatchHistory: saveWatchHistoryAPI,
+
+    // Favorites
+    getFavorites: getFavoritesAPI,
+    toggleFavorite: toggleFavoriteAPI,
 
     // Subscription
     subscribe: subscribeAPI,
