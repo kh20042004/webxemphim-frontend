@@ -87,38 +87,38 @@ async function getCurrentUserAPI() {
 // USER ENDPOINTS
 // ============================================
 
-// GET /api/users/profile
+// GET /api/user/profile
 async function getUserProfileAPI() {
-    return apiRequest('/users/profile');
+    return apiRequest('/user/profile');
 }
 
-// PUT /api/users/profile
+// PUT /api/user/profile
 async function updateProfileAPI(userData) {
-    return apiRequest('/users/profile', {
+    return apiRequest('/user/profile', {
         method: 'PUT',
         body: JSON.stringify(userData),
     });
 }
 
-// PUT /api/users/settings
+// PUT /api/user/settings
 async function updateSettingsAPI(preferences) {
-    return apiRequest('/users/settings', {
+    return apiRequest('/user/settings', {
         method: 'PUT',
         body: JSON.stringify({ preferences }),
     });
 }
 
-// POST /api/users/avatar
+// POST /api/user/avatar
 async function uploadAvatarAPI(formData) {
-    return apiRequest('/users/avatar', {
+    return apiRequest('/user/avatar', {
         method: 'POST',
         body: formData,
     });
 }
 
-// PUT /api/users/password
+// PUT /api/user/password
 async function changePasswordAPI(passwordData) {
-    return apiRequest('/users/password', {
+    return apiRequest('/user/password', {
         method: 'PUT',
         body: JSON.stringify(passwordData),
     });

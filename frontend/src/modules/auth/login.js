@@ -40,9 +40,9 @@ async function fetchUserData(token) {
                 localStorage.setItem('user', JSON.stringify(data.data));
                 console.log('✅ User data saved:', data.data);
                 
-                // Redirect to profile page
+                // Redirect to home page
                 alert('Đăng nhập với Google thành công!');
-                window.location.href = './profile.html';
+                window.location.href = './movies.html';
             }
         } else {
             console.error('❌ Failed to fetch user data:', response.statusText);
@@ -162,8 +162,8 @@ loginForm.addEventListener('submit', async (e) => {
             // Show success message
             alert('Đăng nhập thành công!');
 
-            // Redirect to profile page or dashboard
-            window.location.href = './profile.html';
+            // Redirect to home page
+            window.location.href = './movies.html';
         } else {
             showError(emailInput, emailError, response?.message || 'Đăng nhập thất bại');
         }
@@ -209,7 +209,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     if (response && response.data) {
                         localStorage.setItem('user', JSON.stringify(response.data));
                         alert('Đăng nhập Google thành công!');
-                        window.location.href = './profile.html';
+                        window.location.href = './movies.html';
                     }
                 })
                 .catch(error => {
