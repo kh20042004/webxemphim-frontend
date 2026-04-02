@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - Rồi Giải Trí</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../styles/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <!-- Background Image -->
+        <img src="../assets/images/login-bg.jpg" alt="Background" class="login-bg">
+        
+        <!-- Semi-transparent Overlay -->
+        <div class="login-overlay"></div>
+        
+        <!-- Login Form Container -->
+        <div class="login-form-wrapper">
+            <div class="login-form">
+                <h1 class="login-title">Đăng Nhập</h1>
+                <p class="login-subtitle">Quản lý và nâng cấp tài khoản Rồi Giải Trí</p>
+                
+                <form id="loginForm" class="form-group">
+                    <!-- Email Input -->
+                    <div class="form-field">
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="form-input" 
+                            placeholder="Email"
+                            autocomplete="email"
+                            required
+                        >
+                        <span class="error-message" id="emailError"></span>
+                    </div>
+                    
+                    <!-- Password Input -->
+                    <div class="form-field">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-input" 
+                            placeholder="Mật Khẩu"
+                            autocomplete="current-password"
+                            required
+                        >
+                        <span class="error-message" id="passwordError"></span>
+                    </div>
+                    
+                    <!-- Remember & Forgot Password -->
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" id="rememberMe" name="rememberMe">
+                            <span>Ghi nhớ tôi</span>
+                        </label>
+                        <a href="#" class="forgot-password">Quên mật khẩu</a>
+                    </div>
+                    
+                    <!-- Login Button -->
+                    <button type="submit" class="btn btn-login">Đăng Nhập</button>
+                    
+                    <!-- Divider -->
+                    <div class="divider">
+                        <span>hoặc</span>
+                    </div>
+                    
+                    <!-- Google Login Button -->
+                    <button type="button" class="btn btn-google" id="googleLoginBtn">
+                        <img src="https://www.gstatic.com/images/branding/product/1x/googleg_standard_color_128dp.png" alt="Google" class="google-icon">
+                        Đăng nhập bằng google
+                    </button>
+                </form>
+                
+                <!-- Sign Up Link -->
+                <p class="signup-link">
+                    Chưa có tài khoản? <a href="./register.html">Tạo tài khoản mới →</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Spinner (for async operations) -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal" id="forgotPasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Quên Mật Khẩu</h2>
+                <button type="button" class="modal-close" id="closeForgotModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Step 1: Send Code -->
+                <div id="step1-send-code" class="modal-step active">
+                    <p class="modal-subtitle">Nhập email để nhận mã khôi phục mật khẩu</p>
+                    <form id="forgotPasswordForm">
+                        <div class="form-field">
+                            <input 
+                                type="email" 
+                                id="forgotEmail" 
+                                name="email" 
+                                class="form-input" 
+                                placeholder="Email"
+                                autocomplete="email"
+                                required
+                            >
+                            <span class="error-message" id="forgotEmailError"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="sendCodeBtn">Gửi Mã Khôi Phục</button>
+                    </form>
+                </div>
+
+                <!-- Step 2: Enter Code & New Password -->
+                <div id="step2-reset-password" class="modal-step">
+                    <p class="modal-subtitle">Nhập mã khôi phục và mật khẩu mới</p>
+                    <form id="resetPasswordForm">
+                        <div class="form-field">
+                            <input 
+                                type="text" 
+                                id="resetCode" 
+                                name="code" 
+                                class="form-input" 
+                                placeholder="Mã khôi phục (từ email)"
+                                required
+                            >
+                            <span class="error-message" id="resetCodeError"></span>
+                        </div>
+                        <div class="form-field">
+                            <input 
+                                type="password" 
+                                id="newPassword" 
+                                name="newPassword" 
+                                class="form-input" 
+                                placeholder="Mật khẩu mới"
+                                autocomplete="new-password"
+                                required
+                            >
+                            <span class="error-message" id="newPasswordError"></span>
+                        </div>
+                        <div class="form-field">
+                            <input 
+                                type="password" 
+                                id="confirmNewPassword" 
+                                name="confirmNewPassword" 
+                                class="form-input" 
+                                placeholder="Xác nhận mật khẩu mới"
+                                autocomplete="new-password"
+                                required
+                            >
+                            <span class="error-message" id="confirmNewPasswordError"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="resetBtn">Đặt Lại Mật Khẩu</button>
+                        <button type="button" class="btn btn-secondary" id="backBtn">Quay Lại</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+    
+    <script src="../services/api.js" defer></script>
+    <script src="../modules/auth/login.js" defer></script>
+</body>
+</html>

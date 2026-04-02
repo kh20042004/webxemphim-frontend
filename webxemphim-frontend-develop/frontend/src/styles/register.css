@@ -1,0 +1,357 @@
+/* ============================================
+   REGISTER PAGE STYLES
+   ============================================ */
+
+:root {
+    --primary-color: #00d084;
+    --primary-hover: #00b870;
+    --error-color: #ff4757;
+    --text-light: #e4e4e4;
+    --text-muted: #a8a8a8;
+    --border-color: #555;
+    --overlay-color: rgba(0, 0, 0, 0.5);
+    --bg-dark: #1a1a1a;
+    --input-bg: rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   CONTAINER
+   ============================================ */
+
+.register-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.register-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.register-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--overlay-color);
+    z-index: 2;
+}
+
+/* ============================================
+   FORM WRAPPER & CONTAINER
+   ============================================ */
+
+.register-form-wrapper {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.register-form {
+    background: rgba(26, 26, 26, 0.85);
+    border-radius: 16px;
+    padding: 28px 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   TITLES
+   ============================================ */
+
+.register-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 8px 0;
+    text-align: center;
+}
+
+.register-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-align: center;
+    margin: 0 0 32px 0;
+    line-height: 1.5;
+}
+
+/* ============================================
+   FORM GROUP & FIELDS
+   ============================================ */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-light);
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-input::placeholder {
+    color: var(--text-muted);
+}
+
+.form-input:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 208, 132, 0.1);
+}
+
+.form-input.error {
+    border-color: var(--error-color);
+    background-color: rgba(255, 71, 87, 0.05);
+}
+
+.error-message {
+    font-size: 12px;
+    color: var(--error-color);
+    height: 16px;
+    line-height: 16px;
+    min-height: 16px;
+}
+
+/* ============================================
+   TERMS & CONDITIONS
+   ============================================ */
+
+.terms-agreement {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--text-light);
+    user-select: none;
+    line-height: 1.4;
+}
+
+.checkbox-label input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    margin-top: 2px;
+    accent-color: var(--primary-color);
+}
+
+.checkbox-label a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.checkbox-label a:hover {
+    text-decoration: underline;
+    color: var(--primary-hover);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.btn {
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    outline: none;
+}
+
+.btn-register {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: #000;
+    margin-bottom: 16px;
+}
+
+.btn-register:hover {
+    background-color: var(--primary-hover);
+    box-shadow: 0 4px 12px rgba(0, 208, 132, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-register:active {
+    transform: translateY(0);
+}
+
+.btn-register:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-google {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+}
+
+.btn-google:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: var(--text-light);
+}
+
+.google-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* ============================================
+   DIVIDER
+   ============================================ */
+
+.divider {
+    position: relative;
+    text-align: center;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    transform: translateY(-50%);
+}
+
+.divider span {
+    position: relative;
+    background-color: rgba(26, 26, 26, 0.85);
+    padding: 0 12px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+/* ============================================
+   LOGIN LINK
+   ============================================ */
+
+.login-link {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.login-link a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.login-link a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+/* ============================================
+   LOADING SPINNER
+   ============================================ */
+
+.loading-spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-spinner.active {
+    display: flex;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 480px) {
+    .register-form {
+        padding: 32px 24px;
+    }
+
+    .register-title {
+        font-size: 28px;
+    }
+
+    .btn {
+        font-size: 13px;
+        padding: 10px 14px;
+    }
+
+    .checkbox-label {
+        font-size: 11px;
+    }
+}

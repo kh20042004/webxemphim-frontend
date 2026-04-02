@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký - Rồi Giải Trí</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../styles/register.css">
+</head>
+<body>
+    <div class="register-container">
+        <!-- Background Image -->
+        <img src="../assets/images/register-bg.jpg" alt="Background" class="register-bg">
+        
+        <!-- Semi-transparent Overlay -->
+        <div class="register-overlay"></div>
+        
+        <!-- Register Form Container -->
+        <div class="register-form-wrapper">
+            <div class="register-form">
+                <h1 class="register-title">Đăng Ký</h1>
+                <p class="register-subtitle">Tạo tài khoản để bắt đầu trải nghiệm</p>
+                
+                <form id="registerForm" class="form-group">
+                    <!-- Full Name Input -->
+                    <div class="form-field">
+                        <input 
+                            type="text" 
+                            id="fullName" 
+                            name="fullName" 
+                            class="form-input" 
+                            placeholder="Họ và Tên"
+                            required
+                        >
+                        <span class="error-message" id="fullNameError"></span>
+                    </div>
+                    
+                    <!-- Email Input -->
+                    <div class="form-field">
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="form-input" 
+                            placeholder="Email"
+                            autocomplete="email"
+                            required
+                        >
+                        <span class="error-message" id="emailError"></span>
+                    </div>
+                    
+                    <!-- Password Input -->
+                    <div class="form-field">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-input" 
+                            placeholder="Mật Khẩu"
+                            autocomplete="new-password"
+                            required
+                        >
+                        <span class="error-message" id="passwordError"></span>
+                    </div>
+                    
+                    <!-- Confirm Password Input -->
+                    <div class="form-field">
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            name="confirmPassword" 
+                            class="form-input" 
+                            placeholder="Nhập lại Mật Khẩu"
+                            autocomplete="new-password"
+                            required
+                        >
+                        <span class="error-message" id="confirmPasswordError"></span>
+                    </div>
+                    
+                    <!-- Terms & Conditions -->
+                    <div class="terms-agreement">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                            <span>Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a></span>
+                        </label>
+                        <span class="error-message" id="termsError"></span>
+                    </div>
+                    
+                    <!-- Register Button -->
+                    <button type="submit" class="btn btn-register">Đăng Ký</button>
+                    
+                    <!-- Divider -->
+                    <div class="divider">
+                        <span>hoặc</span>
+                    </div>
+                    
+                    <!-- Google Register Button -->
+                    <button type="button" class="btn btn-google" id="googleRegisterBtn">
+                        <img src="https://www.gstatic.com/images/branding/product/1x/googleg_standard_color_128dp.png" alt="Google" class="google-icon">
+                        Đăng ký bằng google
+                    </button>
+                </form>
+                
+                <!-- Login Link -->
+                <p class="login-link">
+                    Đã có tài khoản? <a href="./login.html">Đăng nhập →</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Spinner (for async operations) -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+    
+    <script src="../services/api.js" defer></script>
+    <script src="../modules/auth/register.js" defer></script>
+</body>
+</html>
