@@ -48,16 +48,6 @@ app.get('/settings.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/src/pages/settings.html'));
 });
 
-// Direct access to movies.html
-app.get('/movies.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend/src/pages/movies.html'));
-});
-
-// Direct access to detail.html
-app.get('/detail.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend/src/pages/detail.html'));
-});
-
 // ==================== ROOT & FALLBACK ROUTES ====================
 // Serve login page cho root /
 app.get('/', (req, res) => {
