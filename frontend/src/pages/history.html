@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch sử xem phim - VFLIX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../services/theme.js"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+
+<body class="bg-neutral-50 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-300 min-h-screen flex flex-col md:flex-row antialiased selection:bg-cyan-500/30 overflow-hidden relative transition-colors duration-500">
+
+    <!-- Background Ambient Effects -->
+    <div class="fixed top-[-10%] left-[-10%] w-3/4 h-3/4 bg-cyan-900/10 rounded-full blur-[150px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-5%] w-1/2 h-1/2 bg-emerald-900/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
+    <!-- Mobile Top Bar -->
+    <div class="md:hidden flex items-center justify-between p-4 border-b border-neutral-200 dark:border-neutral-800/40 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md relative z-20 shrink-0">
+        <div class="text-xl font-semibold tracking-tight text-white flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(34,211,238,0.3)]">
+                <span class="text-white text-sm">V</span>
+            </div>
+            VFLIX
+        </div>
+        <div class="w-8 h-8 rounded-full bg-neutral-700 overflow-hidden border border-neutral-600">
+            <img id="mobileAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-full h-full object-cover">
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="hidden md:flex w-64 border-r border-neutral-800/40 bg-neutral-950/50 backdrop-blur-2xl flex-col relative z-20 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
+        <div class="p-6 pb-8 border-b border-neutral-800/40">
+            <div class="text-xl font-semibold tracking-tight text-white flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(34,211,238,0.3)]">
+                    <span class="text-white text-sm">V</span>
+                </div>
+                VFLIX
+            </div>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+            <a href="./profile.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-neutral-400 hover:text-white hover:bg-neutral-800/30 transition-all duration-300 group">
+                <iconify-icon icon="solar:user-linear" stroke-width="1.5" class="text-lg group-hover:scale-110 transition-transform"></iconify-icon>
+                Hồ sơ
+            </a>
+            <a href="./history.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-cyan-300 bg-cyan-950/30 border border-cyan-900/50 shadow-[0_0_20px_-5px_rgba(34,211,238,0.15)] relative overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <iconify-icon icon="solar:history-bold" stroke-width="1.5" class="text-lg text-cyan-400 relative z-10 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]"></iconify-icon>
+                <span class="relative z-10">Lịch sử xem phim</span>
+            </a>
+            <a href="./favorites.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-neutral-400 hover:text-white hover:bg-neutral-800/30 transition-all duration-300 group">
+                <iconify-icon icon="solar:heart-linear" stroke-width="1.5" class="text-lg group-hover:scale-110 transition-transform"></iconify-icon>
+                Phim yêu thích
+            </a>
+            <a href="./subscription.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-neutral-400 hover:text-white hover:bg-neutral-800/30 transition-all duration-300 group">
+                <iconify-icon icon="solar:ticket-linear" stroke-width="1.5" class="text-lg group-hover:scale-110 transition-transform"></iconify-icon>
+                Gói dịch vụ
+            </a>
+            <a href="./settings.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-neutral-400 hover:text-white hover:bg-neutral-800/30 transition-all duration-300 group">
+                <iconify-icon icon="solar:settings-linear" stroke-width="1.5" class="text-lg group-hover:scale-110 transition-transform"></iconify-icon>
+                Cài đặt
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-neutral-800/40">
+            <div class="flex items-center gap-3 px-4 py-2 rounded-xl bg-neutral-900/40 border border-neutral-800/50 cursor-pointer hover:bg-neutral-800/50 transition-colors">
+                <div class="w-8 h-8 rounded-full bg-neutral-700 overflow-hidden border border-neutral-600 shrink-0">
+                    <img id="sidebarAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-white truncate" id="userNameDisplay">Đang tải...</p>
+                    <p class="text-xs text-neutral-500 truncate" id="userPlanDisplay">Free Plan</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col min-h-0 md:h-screen relative z-10 overflow-hidden">
+        <header class="px-4 md:px-8 pt-6 md:pt-10 pb-4 md:pb-6 shrink-0 relative z-20 bg-gradient-to-b from-neutral-950 to-transparent">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                     <h1 class="text-xl md:text-2xl font-semibold tracking-tight text-white mb-1 drop-shadow-md">Lịch sử xem phim</h1>
+                     <p class="text-neutral-500 text-sm">Các bộ phim bạn đã xem gần đây</p>
+                </div>
+                <div class="flex gap-3 w-full sm:w-auto">
+                    <button onclick="clearHistory()" class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white text-sm font-medium border border-rose-500/20 transition-all">
+                        <iconify-icon icon="solar:trash-bin-trash-linear" class="text-lg"></iconify-icon>
+                        Xóa tất cả
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto px-4 md:px-8 pb-24 md:pb-12">
+            <!-- Timeline Container -->
+            <div id="historyGrid" class="space-y-8" style="animation: fadeUp 0.6s ease-out forwards;">
+                <!-- Loading State -->
+                <div class="flex justify-center py-20">
+                     <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-cyan-500"></div>
+                </div>
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden flex-col items-center justify-center py-24 text-center">
+                <div class="w-20 h-20 rounded-full bg-neutral-900 flex items-center justify-center mb-4 border border-neutral-800">
+                    <iconify-icon icon="solar:history-linear" class="text-4xl text-neutral-700"></iconify-icon>
+                </div>
+                <h3 class="text-lg font-medium text-white mb-2">Lịch sử trống</h3>
+                <p class="text-neutral-500 max-w-xs mx-auto mb-6">Bạn chưa xem bộ phim nào gần đây.</p>
+                <a href="/" class="px-6 py-2 bg-neutral-800 hover:bg-neutral-700 text-white rounded-xl transition-all border border-neutral-700">Bắt đầu xem phim</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-neutral-950/90 backdrop-blur-xl border-t border-neutral-800/60 z-50 flex items-center justify-around p-2 pb-safe shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
+        <a href="/" class="flex flex-col items-center gap-1 p-2 text-neutral-400 hover:text-white transition-colors">
+            <iconify-icon icon="solar:home-linear" stroke-width="1.5" class="text-xl"></iconify-icon>
+            <span class="text-xs font-medium">Trang chủ</span>
+        </a>
+        <a href="./history.html" class="flex flex-col items-center gap-1 p-2 text-cyan-400 transition-colors relative">
+            <div class="absolute inset-0 bg-cyan-500/10 rounded-xl blur-md"></div>
+            <iconify-icon icon="solar:history-bold" stroke-width="1.5" class="text-xl relative z-10"></iconify-icon>
+            <span class="text-xs font-medium relative z-10">Lịch sử</span>
+        </a>
+        <a href="./favorites.html" class="flex flex-col items-center gap-1 p-2 text-neutral-400 hover:text-white transition-colors">
+            <iconify-icon icon="solar:heart-linear" stroke-width="1.5" class="text-xl"></iconify-icon>
+            <span class="text-xs font-medium">Yêu thích</span>
+        </a>
+        <a href="./profile.html" class="flex flex-col items-center gap-1 p-2 text-neutral-400 hover:text-white transition-colors">
+            <iconify-icon icon="solar:user-linear" stroke-width="1.5" class="text-xl"></iconify-icon>
+            <span class="text-xs font-medium">Hồ sơ</span>
+        </a>
+    </nav>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed top-4 right-4 z-[200] transform translate-x-full transition-transform duration-300">
+        <div class="bg-neutral-900 border border-neutral-800 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3">
+            <iconify-icon id="toastIcon" icon="solar:check-circle-bold" class="text-2xl text-emerald-400"></iconify-icon>
+            <p id="toastMessage" class="text-sm font-medium text-white"></p>
+        </div>
+    </div>
+    
+    <script src="../services/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!localStorage.getItem('token')) {
+                window.location.href = './login.html';
+                return;
+            }
+
+            const loadInfo = (user) => {
+                document.getElementById('userNameDisplay').textContent = user.fullName;
+                document.getElementById('userPlanDisplay').textContent = (user.subscription?.plan || 'Free').toUpperCase() + ' Plan';
+                if (user.avatar) {
+                    const avatarUrl = user.avatar.startsWith('http') ? user.avatar : `http://localhost:3000/${user.avatar}`;
+                    document.getElementById('sidebarAvatar').src = avatarUrl;
+                    document.getElementById('mobileAvatar').src = avatarUrl;
+                }
+            };
+
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) loadInfo(user);
+
+            // Fetch History
+            try {
+                const res = await API.getWatchHistory();
+                const container = document.getElementById('historyGrid');
+                container.innerHTML = '';
+
+                if (res.success && res.data.length > 0) {
+                    res.data.forEach(item => {
+                        const movie = item.movieId;
+                        const date = new Date(item.updatedAt);
+                         // Format as "Hôm qua lúc 20:30" or similar
+                        const timeStr = date.toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' });
+                        
+                        const row = document.createElement('div');
+                        row.className = 'group w-full bg-neutral-900/40 border border-neutral-800/60 p-4 rounded-2xl flex items-center gap-6 hover:border-cyan-500/30 hover:bg-neutral-800/40 transition-all cursor-pointer';
+                        row.onclick = () => window.location.href = `/movie/${movie.slug}`;
+                        row.innerHTML = `
+                            <div class="w-24 md:w-32 aspect-video rounded-xl overflow-hidden shrink-0 border border-neutral-800">
+                                <img src="${movie.poster}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-white font-medium truncate mb-1 group-hover:text-cyan-400 transition-colors">${movie.title}</h3>
+                                <div class="flex flex-wrap items-center gap-3 text-[10px] md:text-xs text-neutral-500">
+                                     <span class="flex items-center gap-1"><iconify-icon icon="solar:clock-circle-linear"></iconify-icon> ${timeStr}</span>
+                                     <span class="w-1 h-1 rounded-full bg-neutral-700"></span>
+                                     <span class="text-cyan-500 font-medium">Tiến độ: ${Math.floor(item.timestamp / 60)} phút</span>
+                                </div>
+                            </div>
+                            <button onclick="deleteSingle(event, '${movie._id}')" class="p-2 text-neutral-500 hover:text-rose-500 hover:bg-rose-500/10 rounded-lg transition-all opacity-0 group-hover:opacity-100">
+                                 <iconify-icon icon="solar:close-circle-linear" class="text-xl"></iconify-icon>
+                            </button>
+                        `;
+                        container.appendChild(row);
+                    });
+                } else {
+                    document.getElementById('emptyState').classList.remove('hidden');
+                }
+            } catch (err) { console.error(err); }
+        });
+
+        async function deleteSingle(e, id) {
+             e.stopPropagation();
+             try {
+                // We need to add deleteHistory to API if not there
+                const res = await apiRequest(`/history/${id}`, { method: 'DELETE' });
+                if (res.success) window.location.reload();
+             } catch (err) { console.error(err); }
+        }
+
+        async function clearHistory() {
+            if (!confirm('Bạn có chắc chắn muốn xóa toàn bộ lịch sử xem?')) return;
+            try {
+                const res = await apiRequest('/history/clear', { method: 'DELETE' });
+                if (res.success) {
+                    showToast('Đã xóa toàn bộ lịch sử', 'success');
+                    setTimeout(() => window.location.reload(), 1500);
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.remove('translate-x-full');
+            setTimeout(() => toast.classList.add('translate-x-full'), 3000);
+        }
+    </script>
+</body>
+</html>

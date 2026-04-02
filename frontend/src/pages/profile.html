@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ cá nhân - VFLIX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../services/theme.js"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slide {
+            animation: slideIn 0.6s ease-out forwards;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+        }
+
+        .dark .glass {
+            background: rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-neutral-50 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-300 min-h-screen flex flex-col md:flex-row antialiased selection:bg-cyan-500/30 overflow-hidden relative transition-colors duration-500">
+
+    <!-- Ambient Glows -->
+    <div
+        class="fixed top-[-10%] left-[-10%] w-3/4 h-3/4 bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none z-0">
+    </div>
+    <div
+        class="fixed bottom-[-5%] right-[-5%] w-1/2 h-1/2 bg-purple-500/5 rounded-full blur-[120px] pointer-events-none z-0">
+    </div>
+
+    <!-- Mobile Top Bar -->
+    <div
+        class="md:hidden flex items-center justify-between p-4 border-b border-neutral-200 dark:border-neutral-800/40 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md relative z-20 shrink-0">
+        <div class="text-xl font-bold tracking-tighter text-neutral-900 dark:text-white flex items-center gap-2">
+            <div
+                class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-lg">
+                <span class="text-white text-sm">V</span>
+            </div>
+            VFLIX
+        </div>
+        <img id="headerAvatar" src=""
+            class="w-8 h-8 rounded-full border border-neutral-200 dark:border-neutral-700 object-cover">
+    </div>
+
+    <!-- Sidebar -->
+    <aside
+        class="hidden md:flex w-72 border-r border-neutral-200 dark:border-neutral-800/40 bg-white dark:bg-neutral-950/50 backdrop-blur-2xl flex-col relative z-20 shadow-2xl transition-all duration-300">
+        <div class="p-8 border-b border-neutral-100 dark:border-neutral-800/40">
+            <div class="text-2xl font-bold tracking-tighter text-neutral-900 dark:text-white flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.4)]">
+                    <span class="text-white text-lg">V</span>
+                </div>
+                <span>VFLIX<span class="text-cyan-500 text-xs align-top ml-1">PRO</span></span>
+            </div>
+        </div>
+
+        <nav class="flex-1 p-6 space-y-1.5 overflow-y-auto">
+            <a href="./profile.html"
+                class="flex items-center gap-3 px-5 py-3.5 rounded-2xl text-sm font-semibold text-cyan-600 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-950/30 border border-cyan-100 dark:border-cyan-900/50 shadow-sm relative overflow-hidden group">
+                <div
+                    class="absolute inset-x-0 bottom-0 h-0.5 bg-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform">
+                </div>
+                <iconify-icon icon="solar:user-bold" class="text-xl"></iconify-icon>
+                <span>Hồ sơ cá nhân</span>
+            </a>
+            <a href="./history.html"
+                class="flex items-center gap-3 px-5 py-3.5 rounded-2xl text-sm font-medium text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/30 transition-all duration-300">
+                <iconify-icon icon="solar:history-linear" class="text-xl"></iconify-icon>
+                <span>Lịch sử xem</span>
+            </a>
+            <a href="./favorites.html"
+                class="flex items-center gap-3 px-5 py-3.5 rounded-2xl text-sm font-medium text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/30 transition-all duration-300">
+                <iconify-icon icon="solar:heart-linear" class="text-xl"></iconify-icon>
+                <span>Phim yêu thích</span>
+            </a>
+            <a href="./subscription.html"
+                class="flex items-center gap-3 px-5 py-3.5 rounded-2xl text-sm font-medium text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/30 transition-all duration-300">
+                <iconify-icon icon="solar:ticket-linear" class="text-xl"></iconify-icon>
+                <span>Gói dịch vụ</span>
+            </a>
+            <a href="./settings.html"
+                class="flex items-center gap-3 px-5 py-3.5 rounded-2xl text-sm font-medium text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/30 transition-all duration-300">
+                <iconify-icon icon="solar:settings-linear" class="text-xl"></iconify-icon>
+                <span>Cài đặt</span>
+            </a>
+        </nav>
+
+        <div class="p-6 border-t border-neutral-100 dark:border-neutral-800/40">
+            <button id="logoutBtn"
+                class="flex items-center gap-3 w-full px-5 py-3 rounded-2xl text-sm font-semibold text-rose-500 hover:bg-rose-500/5 border border-transparent hover:border-rose-500/20 transition-all">
+                <iconify-icon icon="solar:logout-bold" class="text-xl"></iconify-icon>
+                Đăng xuất
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 overflow-y-auto">
+        <!-- Dashboard Header / Banner -->
+        <div class="relative h-48 md:h-64 w-full overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-cyan-600/40 to-purple-600/40 z-10 backdrop-blur-[2px]"></div>
+            <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070&auto=format&fit=crop"
+                class="w-full h-full object-cover scale-105 opacity-50">
+            <div
+                class="absolute bottom-0 left-0 right-0 p-8 md:p-12 z-20 bg-gradient-to-t from-neutral-50 dark:from-neutral-950 to-transparent">
+                <h1 id="welcomeUser"
+                    class="text-2xl md:text-4xl font-black text-neutral-900 dark:text-white tracking-tighter drop-shadow-xl">
+                    Xin chào, Thành viên!</h1>
+                <p class="text-neutral-500 dark:text-neutral-400 mt-1 text-sm md:text-base font-medium tracking-wide opacity-90">Theo dõi tiến trình xem phim và quản lý tài khoản của bạn.</p>
+            </div>
+        </div>
+
+        <div class="px-6 md:px-12 -mt-8 md:-mt-12 pb-24 relative z-30">
+            <div class="flex flex-col lg:grid lg:grid-cols-12 gap-10">
+                <!-- Left: Profile Info -->
+                <div class="w-full lg:col-span-5 space-y-8 animate-slide">
+                    <!-- Profile Card -->
+                    <div
+                        class="bg-white dark:bg-neutral-900/40 border border-neutral-200 dark:border-neutral-800/60 rounded-[2.5rem] p-8 shadow-xl backdrop-blur-xl group">
+                        <div class="flex flex-col items-center">
+                            <div class="relative mb-6">
+                                <div
+                                    class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200">
+                                </div>
+                                <div
+                                    class="relative w-32 h-32 md:w-36 md:h-36 rounded-full border-4 border-white dark:border-neutral-800 overflow-hidden shadow-2xl">
+                                    <img id="avatarPreview" src="" class="w-full h-full object-cover bg-neutral-200">
+                                    <label for="avatarInput"
+                                        class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer text-white">
+                                        <iconify-icon icon="solar:camera-bold" class="text-3xl"></iconify-icon>
+                                    </label>
+                                </div>
+                                <input type="file" id="avatarInput" class="hidden" accept="image/*">
+                            </div>
+                            <div class="text-center">
+                                <h2 id="fullNameDisplay" class="text-2xl font-bold dark:text-white mb-2">Đang tải...
+                                </h2>
+                                <span id="planBadge"
+                                    class="px-4 py-1.5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 text-[10px] font-black uppercase tracking-[2px] border border-cyan-500/20">Free
+                                    Member</span>
+                            </div>
+                        </div>
+
+                        <!-- Info Form -->
+                        <div class="mt-10 space-y-6">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-neutral-400 uppercase ml-2 tracking-widest">Họ và
+                                    tên</label>
+                                <div class="relative">
+                                    <iconify-icon icon="solar:user-bold"
+                                        class="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 text-xl"></iconify-icon>
+                                    <input type="text" id="fullName"
+                                        class="w-full pl-12 pr-6 py-4 bg-neutral-100 dark:bg-neutral-800/50 border border-transparent focus:border-cyan-500/50 rounded-2xl outline-none transition-all dark:text-white font-medium"
+                                        placeholder="Tên của bạn">
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-neutral-400 uppercase ml-2 tracking-widest">Email
+                                    đăng ký</label>
+                                <div class="relative">
+                                    <iconify-icon icon="solar:letter-bold"
+                                        class="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 text-xl"></iconify-icon>
+                                    <input type="email" id="email" disabled
+                                        class="w-full pl-12 pr-6 py-4 bg-neutral-100/80 dark:bg-neutral-800/30 border border-transparent rounded-2xl text-neutral-600 dark:text-neutral-400 cursor-not-allowed font-medium"
+                                        value="">
+                                </div>
+                            </div>
+                            <button id="updateProfileBtn"
+                                class="w-full py-4 bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-bold rounded-2xl shadow-lg shadow-cyan-500/20 transition-all transform active:scale-95">
+                                Lưu thay đổi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Stats & Additional Actions -->
+                <div class="w-full lg:col-span-7 space-y-8 animate-slide" style="animation-delay: 0.2s">
+                    <!-- Stats Section -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div
+                            class="bg-white dark:bg-neutral-900/60 p-6 rounded-3xl border border-neutral-200 dark:border-neutral-800 flex flex-col items-center justify-center text-center shadow-lg hover:-translate-y-1 transition-transform">
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-500 mb-4 flex items-center justify-center">
+                                <iconify-icon icon="solar:history-bold" class="text-2xl"></iconify-icon>
+                            </div>
+                            <p class="text-2xl font-black dark:text-white" id="statHistory">0</p>
+                            <p class="text-[10px] text-neutral-500 font-bold uppercase tracking-[2px] mt-1.5">Lịch sử xem</p>
+                        </div>
+                        <div
+                            class="bg-white dark:bg-neutral-900/60 p-6 rounded-3xl border border-neutral-200 dark:border-neutral-800 flex flex-col items-center justify-center text-center shadow-lg hover:-translate-y-1 transition-transform">
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 mb-4 flex items-center justify-center">
+                                <iconify-icon icon="solar:heart-bold" class="text-2xl"></iconify-icon>
+                            </div>
+                            <p class="text-2xl font-black dark:text-white" id="statFavorites">0</p>
+                            <p class="text-[10px] text-neutral-500 font-bold uppercase tracking-[2px] mt-1.5">Phim yêu thích</p>
+                        </div>
+                        <div
+                            class="bg-white dark:bg-neutral-900/60 p-6 rounded-3xl border border-neutral-200 dark:border-neutral-800 flex flex-col items-center justify-center text-center shadow-lg hover:-translate-y-1 transition-transform">
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 mb-4 flex items-center justify-center">
+                                <iconify-icon icon="solar:star-bold" class="text-2xl"></iconify-icon>
+                            </div>
+                            <p class="text-2xl font-black dark:text-white" id="statPlan">1</p>
+                            <p class="text-[10px] text-neutral-500 font-bold uppercase tracking-[2px] mt-1.5">Hạng thành viên</p>
+                        </div>
+                    </div>
+
+                    <!-- Security Section -->
+                    <div
+                        class="bg-white dark:bg-neutral-900/40 border border-neutral-200 dark:border-neutral-800/60 rounded-[2.5rem] p-8 shadow-xl">
+                        <h3 class="text-xl font-bold dark:text-white mb-6 flex items-center gap-2">
+                            <iconify-icon icon="solar:lock-keyhole-bold" class="text-cyan-500"></iconify-icon>
+                            Đổi mật khẩu bảo mật
+                        </h3>
+                        <div class="space-y-5">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                                <div class="space-y-2">
+                                    <label class="text-xs font-bold text-neutral-400 uppercase ml-2 tracking-widest">Mật
+                                        khẩu cũ</label>
+                                    <input type="password" id="oldPassword"
+                                        class="w-full px-6 py-4 bg-neutral-100 dark:bg-neutral-800/50 border border-transparent focus:border-cyan-500/50 rounded-2xl outline-none transition-all dark:text-white"
+                                        placeholder="••••••••">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-xs font-bold text-neutral-400 uppercase ml-2 tracking-widest">Mật
+                                        khẩu mới</label>
+                                    <input type="password" id="newPassword"
+                                        class="w-full px-6 py-4 bg-neutral-100 dark:bg-neutral-800/50 border border-transparent focus:border-cyan-500/50 rounded-2xl outline-none transition-all dark:text-white"
+                                        placeholder="••••••••">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-xs font-bold text-neutral-400 uppercase ml-2 tracking-widest">Xác
+                                        nhận lại</label>
+                                    <input type="password" id="passwordConfirm"
+                                        class="w-full px-6 py-4 bg-neutral-100 dark:bg-neutral-800/50 border border-transparent focus:border-cyan-500/50 rounded-2xl outline-none transition-all dark:text-white"
+                                        placeholder="••••••••">
+                                </div>
+                            </div>
+                            <button id="changePasswordBtn"
+                                class="px-10 py-4 bg-neutral-900 dark:bg-neutral-800 hover:bg-black text-white font-bold rounded-2xl transition-all border border-neutral-700/50 transform active:scale-95">
+                                Cập nhật mật khẩu
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Action Links (Quick Links) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <a href="./subscription.html"
+                            class="p-8 bg-gradient-to-br from-indigo-600 to-blue-700 rounded-[2rem] text-white flex items-center justify-between group shadow-xl">
+                            <div>
+                                <p class="text-lg font-bold">Nâng cấp gói VIP</p>
+                                <p class="text-white/60 text-xs mt-1">Trải nghiệm chất lượng 4K & No Ads</p>
+                            </div>
+                            <iconify-icon icon="solar:alt-arrow-right-bold"
+                                class="text-2xl group-hover:translate-x-2 transition-transform"></iconify-icon>
+                        </a>
+                        <div
+                            class="p-8 bg-neutral-200 dark:bg-neutral-800 rounded-[2rem] dark:text-white flex items-center justify-between group shadow-lg">
+                            <div>
+                                <p class="text-lg font-bold">Trung tâm hỗ trợ</p>
+                                <p class="text-neutral-500 text-xs mt-1">Cần giúp đỡ? Liên hệ ngay với chúng tôi</p>
+                            </div>
+                            <iconify-icon icon="solar:chat-line-bold"
+                                class="text-2xl group-hover:scale-110 transition-transform"></iconify-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../services/api.js"></script>
+    <script type="module" src="../modules/profile.js"></script>
+    <script>
+        // Critical UI Sync (Runs before module loads)
+        (function () {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                const map = {
+                    'fullNameDisplay': user.fullName,
+                    'fullName': user.fullName,
+                    'email': user.email,
+                    'planBadge': (user.subscription?.plan || 'Free Member').toUpperCase(),
+                    'welcomeUser': `Xin chào, ${user.fullName.split(' ')[0]}!`,
+                    'statFavorites': user.favorites?.length || 0,
+                    'statPlan': (user.subscription?.plan || 'Basic').toUpperCase()
+                };
+                for (let id in map) {
+                    let el = document.getElementById(id);
+                    if (el) {
+                        if (el.tagName === 'INPUT') el.value = map[id];
+                        else el.textContent = map[id];
+                    }
+                }
+                const avatar = user.avatar ? (user.avatar.startsWith('http') ? user.avatar : `http://localhost:3000/${user.avatar}`) : 'https://images.unsplash.com/photo-1540612633322-62cb3e24de81?q=80';
+                ['avatarPreview', 'headerAvatar', 'sidebarAvatar', 'mobileAvatar'].forEach(id => {
+                    let el = document.getElementById(id);
+                    if (el) el.src = avatar;
+                });
+            }
+        })();
+    </script>
+</body>
+
+</html>
