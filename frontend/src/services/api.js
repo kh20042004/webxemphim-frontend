@@ -2,8 +2,9 @@
    API SERVICE - Base Configuration
    ============================================ */
 
-// Use hardcoded URL for vanilla JS browser environment
-const API_BASE_URL = 'http://localhost:3000/api';
+// URL cơ bản cho API Backend (cổng 5000)
+// Frontend chạy trên cổng 8000, Backend chạy trên cổng 5000
+const API_BASE_URL = 'http://localhost:5000/api';
 
 // ============================================
 // HELPER FUNCTION: Make API Requests
@@ -11,10 +12,12 @@ const API_BASE_URL = 'http://localhost:3000/api';
 
 async function apiRequest(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
-    const headers = {
-        'Content-Type': 'application/json',
-        ...options.headers,
-    };
+    const headers = { ...options.headers };
+
+    // Don't set Content-Type for FormData (browser will set it with boundary)
+    if (!(options.body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+    }
 
     // Include token if available
     const token = localStorage.getItem('token');
@@ -95,6 +98,22 @@ async function updateProfileAPI(userData) {
     return apiRequest('/user/profile', {
         method: 'PUT',
         body: JSON.stringify(userData),
+    });
+}
+
+// PUT /api/user/settings
+async function updateSettingsAPI(preferences) {
+    return apiRequest('/user/settings', {
+        method: 'PUT',
+        body: JSON.stringify({ preferences }),
+    });
+}
+
+// POST /api/user/avatar
+async function uploadAvatarAPI(formData) {
+    return apiRequest('/user/avatar', {
+        method: 'POST',
+        body: formData,
     });
 }
 
@@ -202,12 +221,43 @@ async function saveWatchHistoryAPI(historyData) {
 // SUBSCRIPTION ENDPOINTS
 // ============================================
 
-// POST /api/subscribe
+// POST /api/user/subscribe
 async function subscribeAPI(subscriptionData) {
-    return apiRequest('/subscribe', {
+    return apiRequest('/user/subscribe', {
         method: 'POST',
         body: JSON.stringify(subscriptionData),
     });
+}
+
+// GET /api/favorites - Lấy danh sách phim yêu thích của user
+async function getFavoritesAPI() {
+    return apiRequest('/favorites');
+}
+
+// POST /api/favorites/:movieId - Thêm phim vào yêu thích
+async function addFavoriteAPI(movieId) {
+    return apiRequest(`/favorites/${movieId}`, {
+        method: 'POST',
+    });
+}
+
+// DELETE /api/favorites/:movieId - Xóa phim khỏi yêu thích
+async function removeFavoriteAPI(movieId) {
+    return apiRequest(`/favorites/${movieId}`, {
+        method: 'DELETE',
+    });
+}
+
+// POST /api/favorites/toggle/:movieId - Toggle yêu thích (thêm nếu chưa có, xóa nếu đã có)
+async function toggleFavoriteAPI(movieId) {
+    return apiRequest(`/favorites/toggle/${movieId}`, {
+        method: 'POST',
+    });
+}
+
+// GET /api/favorites/check/:movieId - Kiểm tra phim có trong yêu thích không
+async function checkFavoriteAPI(movieId) {
+    return apiRequest(`/favorites/check/${movieId}`);
 }
 
 // ============================================
@@ -285,6 +335,8 @@ const API = {
     // User
     getUserProfile: getUserProfileAPI,
     updateProfile: updateProfileAPI,
+    updateSettings: updateSettingsAPI,
+    uploadAvatar: uploadAvatarAPI,
     changePassword: changePasswordAPI,
 
     // Movies
@@ -309,6 +361,13 @@ const API = {
     getWatchHistory: getWatchHistoryAPI,
     saveWatchHistory: saveWatchHistoryAPI,
 
+    // Favorites - Phim yêu thích
+    getFavorites: getFavoritesAPI,          // Lấy danh sách
+    addFavorite: addFavoriteAPI,            // Thêm phim vào yêu thích
+    removeFavorite: removeFavoriteAPI,      // Xóa phim khỏi yêu thích
+    toggleFavorite: toggleFavoriteAPI,      // Toggle (thêm/xóa tự động)
+    checkFavorite: checkFavoriteAPI,        // Kiểm tra trạng thái tim ❤️/🤍
+
     // Subscription
     subscribe: subscribeAPI,
 
@@ -321,3 +380,4 @@ const API = {
 
 // Make API available globally
 window.API = API;
+

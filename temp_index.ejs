@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FPT Play</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="logo">Γû╢ FPT Play</div>
+      <div class="search-box">
+        <input type="text" placeholder="T├¼m phim..." />
+        <button class="search-icon">≡ƒöì</button>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-item">PL</div>
+      <div class="icon-item">SC</div>
+      <div class="icon-item">GC</div>
+      <div class="icon-item">≡ƒæñ</div>
+    </div>
+  </header>
+
+  <nav class="menu">
+    <div class="menu-links">
+      <a href="#">Truyß╗ün h├¼nh</a>
+      <a href="#">Phim bß╗Ö</a>
+      <a href="#">TV show</a>
+      <a href="#">Thiß║┐u nhi</a>
+      <a href="#">Thß╗â thao</a>
+    </div>
+    <div class="menu-actions">
+      <a class="pill promo" href="#">Phim chiß║┐u rß║íp</a>
+      <a class="pill vip" href="#">G├│i VIP</a>
+    </div>
+  </nav>
+
+  <main class="index-page">
+    <% const featured = movies[0]; %>
+    <section class="hero">
+      <img src="<%= featured.image %>" class="hero-bg" alt="<%= featured.title %>">
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <div class="hero-badge">Phim chiß║┐u rß║íp</div>
+        <h1 class="hero-title"><%= featured.title %></h1>
+        <p class="hero-desc"><%= featured.description %></p>
+        <a href="/watch/0" class="btn-play">Γû╢ Xem Ngay</a>
+      </div>
+
+      <div class="hero-thumbs">
+        <% movies.slice(1, 5).forEach((movie) => { %>
+          <a href="/watch/<%= movie.id %>"><img src="<%= movie.image %>" alt="<%= movie.title %>"></a>
+        <% }) %>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

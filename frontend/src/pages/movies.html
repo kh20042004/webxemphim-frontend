@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khám Phá Phim - Thu Hà</title>
+    <style>
+        /* --- CSS GIAO DIỆN CHUẨN --- */
+        
+        body {
+            background-color: #141414;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #e50914;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+        
+        .filter-section {
+            display: flex;
+            gap: 10px;
+            margin: 0 0 30px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        input,
+        select,
+        button {
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid #444;
+            background: #333;
+            color: white;
+            outline: none;
+        }
+        
+        button {
+            background-color: #e50914;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        
+        button:hover {
+            background-color: #ff0a16;
+            transform: scale(1.05);
+        }
+        /* Lưới hiển thị phim */
+        
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+            min-height: 400px;
+        }
+        
+        .movie-card {
+            background: #1f1f1f;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: 0.3s;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(229, 9, 20, 0.3);
+        }
+        
+        .movie-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        
+        .movie-info {
+            padding: 12px;
+            flex-grow: 1;
+        }
+        
+        .movie-info h3 {
+            font-size: 15px;
+            margin: 0 0 8px 0;
+            color: #fff;
+            /* Giới hạn 2 dòng tiêu đề */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 40px;
+        }
+        
+        .movie-meta {
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(229, 9, 20, 0.9);
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 3px;
+            z-index: 1;
+        }
+        
+        .pagination {
+            text-align: center;
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            align-items: center;
+            padding-bottom: 40px;
+        }
+        
+        .pagination button:disabled {
+            background: #444;
+            color: #777;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        #page-info {
+            font-weight: bold;
+            color: #e50914;
+        }
+        
+        .loading-spinner {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2rem;
+            color: #e50914;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>KHÁM PHÁ PHIM</h1>
+
+        <div class="filter-section">
+            <input type="text" id="search-input" placeholder="Tìm tên phim...">
+
+            <select id="filter-type">
+                <option value="Tất cả">Tất cả loại</option>
+                <option value="phim_le">Phim Lẻ</option>
+                <option value="phim_bo">Phim Bộ</option>
+                <option value="TV Show">TV Show</option>
+
+            </select>
+
+            <select id="filter-category">
+                <option value="Tất cả">Tất cả thể loại</option>
+                <option value="Hành động">Hành động</option>
+                <option value="Gia đình">Gia đình</option>
+                <option value="Khoa học viễn tưởng">Khoa học viễn tưởng</option>
+                <option value="Hoạt hình">Hoạt hình</option>
+                <option value="Tình cảm">Tình cảm</option>
+                <option value="Âm nhạc">Âm nhạc</option>
+                <option value="Giải trí">Giải trí</option>
+                <option value="Hẹn hò">Hẹn hò</option>
+            </select>
+
+            <select id="year-filter">
+                 <option value="">Tất cả năm</option>
+                 <option value="2024">2024</option>
+                 <option value="2023">2023</option>
+                 <option value="2022">2022</option>
+                 <option value="2021">2021</option>
+                 <option value="2020">2020</option>
+                 <option value="2019">2019</option>
+    </select>
+
+            <button id="search-btn">LỌC PHIM</button>
+            <button id="clear-btn" style="background: #444;">XÓA HẾT</button>
+        </div>
+
+        <div id="movie-grid" class="movie-grid">
+            <!-- Dữ liệu đổ vào đây -->
+        </div>
+
+        <div class="pagination">
+            <button id="prev-btn">Trang trước</button>
+            <span id="page-info">Trang 1 / 1</span>
+            <button id="next-btn">Trang sau</button>
+        </div>
+    </div>
+
+    <script>
+            // URL API backend - backend chạy trên port 5000, KHÔNG phải 8000
+        const API_URL = 'http://localhost:5000/api/movies';
+        let currentPage = 1;
+        const limit = 12;
+
+        // --- HÀM CHÍNH ĐỂ TẢI DỮ LIỆU ---
+        async function loadMovies() {
+            const searchInput = document.getElementById('search-input');
+            const typeSelect = document.getElementById('filter-type');
+            const categorySelect = document.getElementById('filter-category');
+
+            const search = searchInput.value.trim();
+            const type = typeSelect.value;
+            const category = categorySelect.value;
+
+            const params = {
+                page: currentPage,
+                limit: limit
+            };
+
+            // Chỉ gửi lên API nếu giá trị khác "Tất cả"
+            if (search) params.search = search;
+            if (type && type !== "Tất cả") params.type = type;
+            if (category && category !== "Tất cả") params.category = category;
+
+            const query = new URLSearchParams(params);
+
+            try {
+                const response = await fetch(`${API_URL}?${query.toString()}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    renderMovies(result.data);
+
+                    // Cập nhật phân trang
+                    const pg = result.pagination;
+                    if (pg) {
+                        updatePagination(pg.total, pg.currentPage, pg.totalPages);
+                    }
+                }
+            } catch (error) {
+                console.error("Lỗi kết nối Backend:", error);
+                document.getElementById('movie-grid').innerHTML =
+                    '<p style="text-align:center; width:100%">❌ Không thể kết nối với Server.</p>';
+            }
+        }
+
+        // --- HIỂN THỊ PHIM ---
+        function renderMovies(movies) {
+            const grid = document.getElementById('movie-grid');
+            if (!movies || movies.length === 0) {
+                grid.innerHTML = '<p style="text-align:center; width:100%; color: #ccc; padding: 50px;">🔍 Không tìm thấy phim phù hợp.</p>';
+                return;
+            }
+
+            grid.innerHTML = movies.map(movie => `
+            <div class="movie-card">
+                <span class="badge">${movie.type === 'phim_le' ? 'Phim Lẻ' : 'Phim Bộ'}</span>
+                <img src="${movie.thumbnail}" alt="${movie.title}" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
+                <div class="movie-info">
+                    <h3>${movie.title}</h3>
+                    <div class="movie-meta">
+                        <span>📅 ${movie.year}</span> | 📂 ${movie.category}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        }
+
+        // --- CẬP NHẬT PHÂN TRANG ---
+        function updatePagination(total, page, totalPages) {
+            const pageInfo = document.getElementById('page-info');
+            if (pageInfo) {
+                pageInfo.innerText = `Trang ${page || 1} / ${totalPages || 1}`;
+            }
+
+            document.getElementById('prev-btn').disabled = (page <= 1);
+            document.getElementById('next-btn').disabled = (page >= totalPages);
+        }
+
+        // --- SỰ KIỆN CÁC NÚT BẤM ---
+        document.getElementById('search-btn').onclick = () => {
+            currentPage = 1;
+            loadMovies();
+        };
+
+        document.getElementById('clear-btn').onclick = () => {
+            document.getElementById('search-input').value = "";
+            document.getElementById('filter-type').value = "Tất cả";
+            document.getElementById('filter-category').value = "Tất cả";
+            currentPage = 1;
+
+            // Xóa tham số trên URL để quay về trạng thái mặc định
+            window.history.replaceState({}, document.title, window.location.pathname);
+            loadMovies();
+        };
+
+        document.getElementById('prev-btn').onclick = () => {
+            if (currentPage > 1) {
+                currentPage--;
+                loadMovies();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        };
+
+        document.getElementById('next-btn').onclick = () => {
+            currentPage++;
+            loadMovies();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        };
+
+        // --- KHỞI TẠO KHI TRANG LOAD (QUAN TRỌNG) ---
+        window.onload = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // Đọc từ khóa tìm kiếm từ URL (ví dụ: ?search=Avengers)
+            const searchKeyword = urlParams.get('search');
+            if (searchKeyword) {
+                // Điền từ khóa vào ô input để người dùng thấy đang tìm gì
+                const searchInput = document.getElementById('search-input');
+                if (searchInput) {
+                    searchInput.value = decodeURIComponent(searchKeyword);
+                }
+            }
+
+            // Đọc thể loại phim từ URL (ví dụ: ?category=Thiếu%20nhi)
+            // Khi user click "Phim bộ", "Thiếu nhi", "Truyền hình" trên trang chủ,
+            // index.js gọi filterByText() → chuyển sang movies.html?category=XXX
+            // Ở đây đọc tham số đó, điền vào filter và tự động lọc phim
+            const categoryFromUrl = urlParams.get('category');
+            if (categoryFromUrl) {
+                const decodedCategory = decodeURIComponent(categoryFromUrl);
+                const categorySelect = document.getElementById('filter-category');
+                if (categorySelect) {
+                    // Thử gán vào select dropdown
+                    categorySelect.value = decodedCategory;
+                    // Nếu không tìm thấy option khớp (value vẫn là cũ), thêm option mới
+                    if (categorySelect.value !== decodedCategory) {
+                        const newOption = document.createElement('option');
+                        newOption.value = decodedCategory;
+                        newOption.textContent = decodedCategory;
+                        categorySelect.appendChild(newOption);
+                        categorySelect.value = decodedCategory;
+                    }
+                }
+
+                // Cập nhật tiêu đề trang để khớp với thể loại đang xem
+                const pageTitle = document.querySelector('h1');
+                if (pageTitle) {
+                    pageTitle.textContent = decodedCategory.toUpperCase();
+                }
+            }
+
+            // Gọi loadMovies() sau khi đã điền tất cả filter từ URL
+            loadMovies();
+        };
+    </script>

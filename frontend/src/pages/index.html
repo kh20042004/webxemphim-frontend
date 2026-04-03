@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rồi Giải Trí - Xem Phim Online</title>
+  
+  <!-- ==================== CSS ==================== -->
+  <!-- Import CSS cho trang chủ -->
+  <link rel="stylesheet" href="../styles/index.css">
+</head>
+<body>
+  <!-- ==================== HEADER - TOPBAR ==================== -->
+  <!-- Thanh header chứa logo, tìm kiếm và các icon -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <!-- Logo trang web (FPT Play style) -->
+      <div class="logo">▶ FPT Play</div>
+      
+      <!-- Ô tìm kiếm phim -->
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Tìm phim..." />
+        <button class="search-icon" id="searchBtn">🔍</button>
+      </div>
+    </div>
+    
+    <div class="topbar-right">
+      <!-- Các icon tối ưu hoá (PL, SC, GC) -->
+      <div class="icon-item">PL</div>
+      <div class="icon-item">SC</div>
+      <div class="icon-item">GC</div>
+      <!-- Icon user - click để vào profile hoặc login -->
+      <div class="icon-item" id="userIcon" style="cursor: pointer;">👤</div>
+    </div>
+  </header>
+
+  <!-- ==================== MENU - NAVIGATION ==================== -->
+  <!-- Menu điều hướng với các danh mục phim -->
+  <nav class="menu">
+    <div class="menu-links">
+      <!-- Các link danh mục - click để filter phim -->
+      <a href="#" onclick="event.preventDefault(); filterByText('Truyền hình')">Truyền hình</a>
+      <a href="#" onclick="event.preventDefault(); filterByText('Phim bộ')">Phim bộ</a>
+      <a href="#" onclick="event.preventDefault(); filterByText('TV show')">TV show</a>
+      <a href="#" onclick="event.preventDefault(); filterByText('Thiếu nhi')">Thiếu nhi</a>
+      <a href="#" onclick="event.preventDefault(); filterByText('Thể thao')">Thể thao</a>
+    </div>
+    
+    <div class="menu-actions">
+      <!-- Nút "Phim chiếu rạp" - đến trang movies.html -->
+      <a class="pill promo" href="movies.html">Phim chiếu rạp</a>
+      <!-- Nút "Gói VIP" - đến trang subscription.html -->
+      <a class="pill vip" href="subscription.html">Gói VIP</a>
+    </div>
+  </nav>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="index-page">
+    <!-- HERO SECTION - Phần featured phim nổi bật -->
+    <section class="hero" id="heroSection">
+      <!-- Ảnh nền phim nổi bật (được update bởi JavaScript từ API) -->
+      <img src="" class="hero-bg" alt="Featured Movie" id="heroBg">
+      
+      <!-- Overlay gradient trên ảnh -->
+      <div class="hero-overlay"></div>
+      
+      <!-- Nội dung text trên hero -->
+      <div class="hero-content">
+        <!-- Badge "Phim nổi bật" -->
+        <div class="hero-badge">Phim nổi bật</div>
+        
+        <!-- Tiêu đề phim (được update bằng JS) -->
+        <h1 class="hero-title" id="heroTitle">Tải phim...</h1>
+        
+        <!-- Mô tả phim (được update bằng JS) -->
+        <p class="hero-desc" id="heroDesc">Đang tải thông tin phim...</p>
+        
+        <!-- Nút "Xem Ngay" - chuyển sang trang detail -->
+        <a href="#" class="btn-play" id="playBtn">▶ Xem Ngay</a>
+      </div>
+      
+      <!-- Thumbnails những phim khác ở bottom-right của hero -->
+      <div class="hero-thumbs" id="heroThumbs"></div>
+    </section>
+
+    <!-- MOVIES SECTION - Danh sách phim phổ biến -->
+    <section class="movies-section">
+      <!-- Tiêu đề section -->
+      <h2 class="section-title">Phim Phổ Biến</h2>
+      
+      <!-- Grid hiển thị danh sách phim (được fill bằng JS) -->
+      <div class="movies-grid" id="moviesGrid">
+        <!-- Default loading message -->
+        <div class="loading">Đang tải phim...</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <!-- Import JavaScript cho trang chủ -->
+  <script src="../modules/index.js" defer></script>
+</body>
+</html>

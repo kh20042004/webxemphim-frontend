@@ -176,8 +176,8 @@ registerForm.addEventListener('submit', async (e) => {
 
 googleRegisterBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    // Redirect to backend Google OAuth endpoint
-    window.location.href = 'http://localhost:3000/api/auth/google';
+    // Redirect tới backend Google OAuth endpoint (Backend chạy ở port 5000)
+    window.location.href = 'http://localhost:5000/api/auth/google';
 });
 
 // ============================================

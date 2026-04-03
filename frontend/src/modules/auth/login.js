@@ -7,26 +7,32 @@
 // ============================================
 function handleGoogleCallback() {
     const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+    // Backend Google OAuth callback gửi về 'accessToken' và 'refreshToken' (không phải 'token')
+    const accessToken = urlParams.get('accessToken');
+    const refreshToken = urlParams.get('refreshToken');
     
-    if (token) {
-        console.log('✅ Token từ Google callback:', token);
+    if (accessToken) {
+        console.log('✅ AccessToken từ Google callback nhận được');
         
-        // Lưu token vào localStorage
-        localStorage.setItem('token', token);
+        // Lưu cả 2 token vào localStorage
+        localStorage.setItem('token', accessToken);           // Lưu accessToken dưới tên 'token' để các api.js dùng
+        localStorage.setItem('accessToken', accessToken);     // Lưu thêm tên chuẩn
+        if (refreshToken) {
+            localStorage.setItem('refreshToken', refreshToken); // Lưu refreshToken để tự động gia hạn sau
+        }
         
-        // Bỏ token khỏi URL (clean up)
+        // Bỏ các params khỏi URL cho gọn (clean up)
         window.history.replaceState({}, document.title, window.location.pathname);
         
-        // Fetch user data từ backend
-        fetchUserData(token);
+        // Fetch thông tin user từ backend bằng accessToken vừa nhận
+        fetchUserData(accessToken);
     }
 }
 
-// Hàm fetch user data từ token
+// Hàm fetch user data từ token (gọi tới Backend port 5000)
 async function fetchUserData(token) {
     try {
-        const response = await fetch('http://localhost:3000/api/auth/me', {
+        const response = await fetch('http://localhost:5000/api/auth/me', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -42,7 +48,7 @@ async function fetchUserData(token) {
                 
                 // Redirect to home page
                 alert('Đăng nhập với Google thành công!');
-                window.location.href = '/';
+                window.location.href = './index.html';
             }
         } else {
             console.error('❌ Failed to fetch user data:', response.statusText);
@@ -146,32 +152,44 @@ loginForm.addEventListener('submit', async (e) => {
     loginForm.querySelector('.btn-login').disabled = true;
 
     try {
-        // Call API
+        // Gọi API đăng nhập
         const response = await loginAPI({ email, password });
 
-        if (response && response.data && response.data.token) {
-            // Save token to localStorage
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user || {}));
+        // Backend trả về: { success, data: { accessToken, refreshToken, user } }
+        // Phải kiểm tra 'accessToken' (KHÔNG phải 'token')
+        if (response && response.data && response.data.accessToken) {
+            const { accessToken, refreshToken, user } = response.data;
 
-            // Save "Remember Me" preference
-            if (rememberMe) {
-                localStorage.setItem('rememberEmail', email);
+            // Lưu accessToken vào localStorage dưới tên 'token' để api.js dùng
+            localStorage.setItem('token', accessToken);
+            localStorage.setItem('accessToken', accessToken);     // Lưu thêm tên chuẩn
+            localStorage.setItem('user', JSON.stringify(user || {}));
+
+            // Lưu refreshToken để sau này tự động gia hạn token khi hết hạn
+            if (refreshToken) {
+                localStorage.setItem('refreshToken', refreshToken);
             }
 
-            // Show success message
-            alert('Đăng nhập thành công!');
+            // Ghi nhớ email nếu user chọn "Ghi nhớ tôi"
+            if (rememberMe) {
+                localStorage.setItem('rememberEmail', email);
+            } else {
+                // Nếu không chọn ghi nhớ, xóa email đã lưu trước đó
+                localStorage.removeItem('rememberEmail');
+            }
 
-            // Redirect to home page or dashboard
-            window.location.href = '/';
+            // Hiển thị thông báo thành công và chuyển sang trang chủ
+            alert('Đăng nhập thành công!');
+            window.location.href = './index.html';
         } else {
+            // API trả về nhưng không có token → hiển thị thông báo lỗi
             showError(emailInput, emailError, response?.message || 'Đăng nhập thất bại');
         }
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('Lỗi đăng nhập:', error);
         showError(emailInput, emailError, error.message || 'Lỗi kết nối. Vui lòng thử lại.');
     } finally {
-        // Hide loading spinner
+        // Ẩn loading spinner và bật lại nút đăng nhập
         loadingSpinner.classList.remove('active');
         loginForm.querySelector('.btn-login').disabled = false;
     }
@@ -183,8 +201,8 @@ loginForm.addEventListener('submit', async (e) => {
 
 googleLoginBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    // Redirect to backend Google OAuth endpoint
-    window.location.href = 'http://localhost:3000/api/auth/google';
+    // Redirect tới backend Google OAuth endpoint (Backend chạy ở port 5000)
+    window.location.href = 'http://localhost:5000/api/auth/google';
 });
 
 // ============================================
@@ -192,37 +210,45 @@ googleLoginBtn.addEventListener('click', (e) => {
 // ============================================
 
 window.addEventListener('DOMContentLoaded', () => {
-    // ============ CHECK FOR OAUTH CALLBACK TOKEN ============
+    // ============ KIỂM TRA GOOGLE OAUTH CALLBACK ============
+    // Backend Google redirect về: ?accessToken=xxx&refreshToken=yyy
     const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+    const accessToken = urlParams.get('accessToken');
+    const refreshToken = urlParams.get('refreshToken');
 
-    if (token) {
+    if (accessToken) {
         try {
-            // Save token to localStorage
-            localStorage.setItem('token', token);
+            // Lưu token và set header cho các request tiếp theo
+            localStorage.setItem('token', accessToken);           // Tên 'token' để api.js compatible
+            localStorage.setItem('accessToken', accessToken);
+            if (refreshToken) {
+                localStorage.setItem('refreshToken', refreshToken);
+            }
             
-            console.log('OAuth Login Success - Token saved');
+            console.log('✅ Google OAuth thành công - Token đã lưu');
             
-            // Fetch current user data using the token
+            // Lấy thông tin user từ backend
             getCurrentUserAPI()
                 .then(response => {
                     if (response && response.data) {
                         localStorage.setItem('user', JSON.stringify(response.data));
                         alert('Đăng nhập Google thành công!');
-                        window.location.href = '/';
+                        window.location.href = './index.html';
                     }
                 })
                 .catch(error => {
-                    console.error('Error fetching user data:', error);
+                    console.error('Lỗi lấy dữ liệu user:', error);
                     alert('Lỗi khi tải dữ liệu người dùng');
                     localStorage.removeItem('token');
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
                 });
         } catch (error) {
-            console.error('Error processing OAuth token:', error);
+            console.error('Lỗi xử lý Google OAuth:', error);
             alert('Lỗi xử lý kết quả đăng nhập. Vui lòng thử lại.');
             localStorage.removeItem('token');
         }
-        return; // Stop further execution
+        return; // Dừng lại, không chạy code phía dưới
     }
 
     // ============ LOAD SAVED EMAIL (IF "REMEMBER ME" WAS CHECKED) ============
@@ -335,7 +361,8 @@ forgotPasswordForm.addEventListener('submit', async (e) => {
     sendCodeBtn.textContent = 'Đang gửi...';
 
     try {
-        const response = await fetch('http://localhost:3000/api/auth/forgot-password', {
+        // Gửi request tới backend (port 5000) để gửi mã reset password
+        const response = await fetch('http://localhost:5000/api/auth/forgot-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
@@ -393,7 +420,8 @@ resetPasswordForm.addEventListener('submit', async (e) => {
     resetBtn.textContent = 'Đang đặt lại...';
 
     try {
-        const response = await fetch('http://localhost:3000/api/auth/reset-password', {
+        // Gửi request reset password tới backend (port 5000)
+        const response = await fetch('http://localhost:5000/api/auth/reset-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
