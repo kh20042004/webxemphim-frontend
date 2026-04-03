@@ -3,6 +3,7 @@
    ============================================ */
 
 // Use hardcoded URL for vanilla JS browser environment
+// Backend server runs on port 3000, frontend on port 8000
 const API_BASE_URL = 'http://localhost:3000/api';
 
 // ============================================
@@ -268,6 +269,84 @@ async function uploadFileAPI(formData) {
 }
 
 // ============================================
+// SPORTS ENDPOINTS
+// ============================================
+
+// GET /api/sports/leagues
+async function getLeaguesAPI() {
+    return apiRequest('/sports/leagues');
+}
+
+// GET /api/sports/leagues/:id
+async function getLeagueByIdAPI(leagueId) {
+    return apiRequest(`/sports/leagues/${leagueId}`);
+}
+
+// GET /api/sports/matches
+async function getMatchesAPI() {
+    return apiRequest('/sports/matches');
+}
+
+// GET /api/sports/matches/upcoming
+async function getUpcomingMatchesAPI() {
+    return apiRequest('/sports/matches/upcoming');
+}
+
+// GET /api/sports/matches/live
+async function getLiveMatchesAPI() {
+    return apiRequest('/sports/matches/live');
+}
+
+// GET /api/sports/matches/:id
+async function getMatchByIdAPI(matchId) {
+    return apiRequest(`/sports/matches/${matchId}`);
+}
+
+// GET /api/sports/events
+async function getEventsAPI() {
+    return apiRequest('/sports/events');
+}
+
+// GET /api/sports/events/live
+async function getLiveEventsAPI() {
+    return apiRequest('/sports/events/live');
+}
+
+// GET /api/sports/events/:id
+async function getEventByIdAPI(eventId) {
+    return apiRequest(`/sports/events/${eventId}`);
+}
+
+// GET /api/sports/highlights
+async function getHighlightsAPI() {
+    return apiRequest('/sports/highlights');
+}
+
+// GET /api/sports/highlights/trending
+async function getTrendingHighlightsAPI() {
+    return apiRequest('/sports/highlights/trending');
+}
+
+// GET /api/sports/highlights/:id
+async function getHighlightByIdAPI(highlightId) {
+    return apiRequest(`/sports/highlights/${highlightId}`);
+}
+
+// POST /api/sports/highlights/:id/like (Protected)
+async function likeHighlightAPI(highlightId) {
+    return apiRequest(`/sports/highlights/${highlightId}/like`, {
+        method: 'POST',
+    });
+}
+
+// POST /api/sports/highlights/:id/unlike (Protected)
+async function unlikeHighlightAPI(highlightId) {
+    return apiRequest(`/sports/highlights/${highlightId}/unlike`, {
+        method: 'POST',
+    });
+}
+
+// ============================================
 // EXPORT ALL FUNCTIONS
 // ============================================
 
@@ -317,6 +396,22 @@ const API = {
     updateMovie: updateMovieAPI,
     deleteMovie: deleteMovieAPI,
     uploadFile: uploadFileAPI,
+
+    // Sports
+    getLeagues: getLeaguesAPI,
+    getLeagueById: getLeagueByIdAPI,
+    getMatches: getMatchesAPI,
+    getUpcomingMatches: getUpcomingMatchesAPI,
+    getLiveMatches: getLiveMatchesAPI,
+    getMatchById: getMatchByIdAPI,
+    getEvents: getEventsAPI,
+    getLiveEvents: getLiveEventsAPI,
+    getEventById: getEventByIdAPI,
+    getHighlights: getHighlightsAPI,
+    getTrendingHighlights: getTrendingHighlightsAPI,
+    getHighlightById: getHighlightByIdAPI,
+    likeHighlight: likeHighlightAPI,
+    unlikeHighlight: unlikeHighlightAPI,
 };
 
 // Make API available globally

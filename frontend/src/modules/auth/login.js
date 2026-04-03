@@ -162,8 +162,8 @@ loginForm.addEventListener('submit', async (e) => {
             // Show success message
             alert('Đăng nhập thành công!');
 
-            // Redirect to home page or dashboard
-            window.location.href = '/';
+            // Redirect to sports page
+            window.location.href = '/sports.html';
         } else {
             showError(emailInput, emailError, response?.message || 'Đăng nhập thất bại');
         }

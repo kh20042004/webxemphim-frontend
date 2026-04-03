@@ -23,6 +23,11 @@ app.get('/register.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/src/pages/register.html'));
 });
 
+// Direct access to sports.html
+app.get('/sports.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/src/pages/sports.html'));
+});
+
 // ==================== ROOT & FALLBACK ROUTES ====================
 // Serve login page cho root /
 app.get('/', (req, res) => {
