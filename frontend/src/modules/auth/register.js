@@ -137,12 +137,13 @@ registerForm.addEventListener('submit', async (e) => {
         });
 
         if (response && response.success && response.data && response.data.token) {
-            // Optionally save token for auto-login after register
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user || {}));
-            alert('Đăng ký thành công! Vui lòng đăng nhập.');
-            // Redirect to login page
-            window.location.href = '/login.html';
+            // ✅ Hiển thị thông báo thành công
+            window.showToast('Đăng ký thành công! Đang chuyển sang trang đăng nhập...', 'success', 2000);
+            
+            // ✅ Redirect sang trang login sau 1.5 giây
+            setTimeout(() => {
+                window.location.href = './login.html';
+            }, 1500);
         } else if (response && response.message) {
             // Handle specific error messages
             if (response.message.includes('email')) {
