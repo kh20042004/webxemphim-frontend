@@ -8,12 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' }
-        // Theme Loader
-        if (localStorage.getItem('theme') === 'light' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
-            document.documentElement.classList.remove('dark');
-        } else {
-            document.documentElement.classList.add('dark');
-        }
+        // Buộc dark mode cho trang settings
+        document.documentElement.classList.add('dark');
     </script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -67,6 +63,10 @@
         </div>
 
         <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+            <a href="../index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-neutral-400 hover:text-white hover:bg-neutral-800/30 transition-all duration-300 group">
+                <iconify-icon icon="solar:home-linear" stroke-width="1.5" class="text-lg group-hover:scale-110 transition-transform"></iconify-icon>
+                Trang chủ
+            </a>
             <a href="./profile.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-neutral-400 hover:text-white hover:bg-neutral-800/30 transition-all duration-300 group">
                 <iconify-icon icon="solar:user-linear" stroke-width="1.5" class="text-lg group-hover:scale-110 transition-transform"></iconify-icon>
                 Hồ sơ
@@ -231,10 +231,30 @@
                   document.getElementById('emailToggle').checked = user.preferences.emailNotifications !== false;
              }
 
-             document.getElementById('logoutBtn').onclick = () => {
-                 localStorage.removeItem('token');
-                 localStorage.removeItem('user');
-                 window.location.href = './login.html';
+             document.getElementById('logoutBtn').onclick = async () => {
+                 try {
+                     const confirmed = confirm('Bạn chắc chắn muốn đăng xuất?');
+                     if (!confirmed) return;
+                     
+                     await API.logout().catch(() => {
+                         console.warn('Logout API failed');
+                     });
+                     
+                     localStorage.removeItem('token');
+                     localStorage.removeItem('user');
+                     localStorage.removeItem('redirectAfterLogin');
+                     
+                     showToast('Đã đăng xuất thành công');
+                     
+                     setTimeout(() => {
+                         window.location.href = './login.html';
+                     }, 1500);
+                 } catch (error) {
+                     console.error('Logout error:', error);
+                     localStorage.removeItem('token');
+                     localStorage.removeItem('user');
+                     window.location.href = './login.html';
+                 }
              };
         });
 

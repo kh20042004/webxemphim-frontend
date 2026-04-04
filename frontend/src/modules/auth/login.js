@@ -47,16 +47,18 @@ async function fetchUserData(token) {
                 console.log('✅ User data saved:', data.data);
                 
                 // Redirect to home page
-                alert('Đăng nhập với Google thành công!');
-                window.location.href = './index.html';
+                window.showToast('Đăng nhập Google thành công! Đang chuyển hướng...', 'success', 2000);
+                setTimeout(() => {
+                    window.location.href = './index.html';
+                }, 1500);
             }
         } else {
             console.error('❌ Failed to fetch user data:', response.statusText);
-            alert('Lỗi khi lấy dữ liệu người dùng');
+            window.showToast('Lỗi khi lấy dữ liệu người dùng', 'error');
         }
     } catch (error) {
         console.error('❌ Fetch user error:', error);
-        alert('Lỗi kết nối. Vui lòng thử lại.');
+        window.showToast('Lỗi kết nối. Vui lòng thử lại.', 'error');
     }
 }
 
@@ -179,8 +181,10 @@ loginForm.addEventListener('submit', async (e) => {
             }
 
             // Hiển thị thông báo thành công và chuyển sang trang chủ
-            alert('Đăng nhập thành công!');
-            window.location.href = './index.html';
+            window.showToast('Đăng nhập thành công! Đang chuyển hướng...', 'success', 2000);
+            setTimeout(() => {
+                window.location.href = './index.html';
+            }, 1500);
         } else {
             // API trả về nhưng không có token → hiển thị thông báo lỗi
             showError(emailInput, emailError, response?.message || 'Đăng nhập thất bại');
@@ -232,20 +236,22 @@ window.addEventListener('DOMContentLoaded', () => {
                 .then(response => {
                     if (response && response.data) {
                         localStorage.setItem('user', JSON.stringify(response.data));
-                        alert('Đăng nhập Google thành công!');
-                        window.location.href = './index.html';
+                        window.showToast('Đăng nhập Google thành công! Đang chuyển hướng...', 'success', 2000);
+                        setTimeout(() => {
+                            window.location.href = './index.html';
+                        }, 1500);
                     }
                 })
                 .catch(error => {
                     console.error('Lỗi lấy dữ liệu user:', error);
-                    alert('Lỗi khi tải dữ liệu người dùng');
+                    window.showToast('Lỗi khi tải dữ liệu người dùng', 'error');
                     localStorage.removeItem('token');
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('refreshToken');
                 });
         } catch (error) {
             console.error('Lỗi xử lý Google OAuth:', error);
-            alert('Lỗi xử lý kết quả đăng nhập. Vui lòng thử lại.');
+            window.showToast('Lỗi xử lý kết quả đăng nhập. Vui lòng thử lại.', 'error');
             localStorage.removeItem('token');
         }
         return; // Dừng lại, không chạy code phía dưới
@@ -434,8 +440,10 @@ resetPasswordForm.addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok && data.success) {
-            alert('✅ Đặt lại mật khẩu thành công! Vui lòng đăng nhập lại.');
-            closeForgotPasswordModal();
+            window.showToast('Đặt lại mật khẩu thành công! Vui lòng đăng nhập lại.', 'success', 3000);
+            setTimeout(() => {
+                closeForgotPasswordModal();
+            }, 2000);
         } else {
             resetCodeError.textContent = data.message || 'Lỗi đặt lại mật khẩu';
         }

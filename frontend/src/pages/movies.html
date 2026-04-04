@@ -15,6 +15,39 @@
             margin: 0;
         }
         
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(20, 20, 20, 0.5));
+            border-bottom: 1px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+        
+        .back-btn {
+            background: #e50914;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-btn:hover {
+            background: #ff0a16;
+            transform: scale(1.05);
+        }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -162,10 +195,227 @@
             font-size: 1.2rem;
             color: #e50914;
         }
+
+        /* ============================================ */
+        /* CSS CHO MODAL POPUP - Hiển thị chi tiết phim */
+        /* ============================================ */
+
+        /* Container modal chính */
+        .movie-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Overlay (nền tối phía sau modal) - click để đóng */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            cursor: pointer;
+        }
+
+        /* Nội dung modal (cái box trắng chứa info phim) */
+        .modal-content {
+            position: relative;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 2px solid #e50914;
+            border-radius: 12px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(229, 9, 20, 0.3);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Hiệu ứng modal xuất hiện (từ dưới lên) */
+        @keyframes slideIn {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Nút X đóng modal (góc trên phải) */
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border: none;
+            background: #e50914;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: #ff0a16;
+            transform: scale(1.1);
+        }
+
+        /* Layout chính của modal: 2 cột (poster + info) */
+        .modal-body {
+            display: flex;
+            gap: 30px;
+            padding: 40px;
+            align-items: flex-start;
+        }
+
+        /* Cột 1: Poster phim bên trái */
+        .modal-poster {
+            flex-shrink: 0;
+        }
+
+        .modal-poster img {
+            width: 250px;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            border: 2px solid #e50914;
+        }
+
+        /* Cột 2: Thông tin chi tiết phim bên phải */
+        .modal-info {
+            flex: 1;
+            color: white;
+        }
+
+        /* Tiêu đề phim */
+        .modal-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #e50914;
+            margin: 0 0 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Rating (sao) */
+        .modal-rating {
+            font-size: 18px;
+            color: #ffc107;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* Mô tả/giới thiệu phim */
+        .modal-description {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #ddd;
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+
+        /* Chi tiết phim: các dòng thông tin (Năm, Thể loại, Đạo diễn, etc) */
+        .modal-details {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e50914;
+        }
+
+        /* Mỗi dòng chi tiết (Năm, Thể loại, v.v) */
+        .detail-item {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .detail-label {
+            color: #999;
+            min-width: 80px;
+            font-weight: bold;
+        }
+
+        .detail-value {
+            color: #fff;
+            flex: 1;
+        }
+
+        /* Nút "Xem Ngay" - nút chính để vào trang detail */
+        .btn-watch-now {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #e50914, #ff0a16);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
+        }
+
+        .btn-watch-now:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.6);
+            background: linear-gradient(135deg, #ff0a16, #ff4444);
+        }
+
+        /* Responsive design cho mobile */
+        @media (max-width: 768px) {
+            .modal-body {
+                flex-direction: column;
+                padding: 20px;
+                gap: 20px;
+            }
+
+            .modal-poster img {
+                width: 150px;
+                height: 220px;
+            }
+
+            .modal-title {
+                font-size: 20px;
+            }
+
+            .modal-content {
+                max-width: 95%;
+            }
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- Header với nút quay lại -->
+    <header class="header">
+        <a href="index.html" class="back-btn">← Quay lại trang chủ</a>
+        <h2 style="margin: 0; color: #e50914; font-size: 18px;">FPT Play</h2>
+    </header>
 
     <div class="container">
         <h1>KHÁM PHÁ PHIM</h1>
@@ -218,11 +468,197 @@
         </div>
     </div>
 
+    <!-- ============================================ -->
+    <!-- MODAL POPUP - Hiển thị chi tiết phim khi click -->
+    <!-- ============================================ -->
+    <div id="movieModal" class="movie-modal" style="display: none;">
+        <!-- Overlay (nền tối đằng sau modal) -->
+        <div class="modal-overlay" onclick="closeMovieModal()"></div>
+        
+        <!-- Nội dung modal -->
+        <div class="modal-content">
+            <!-- Nút đóng (X) ở góc trên phải -->
+            <button class="modal-close" onclick="closeMovieModal()">✕</button>
+            
+            <!-- Container chứa poster phim và thông tin -->
+            <div class="modal-body">
+                <!-- Cột 1: Poster phim bên trái -->
+                <div class="modal-poster">
+                    <img id="modalPoster" src="" alt="Poster" />
+                </div>
+                
+                <!-- Cột 2: Thông tin chi tiết phim bên phải -->
+                <div class="modal-info">
+                    <!-- Tiêu đề phim -->
+                    <h2 id="modalTitle" class="modal-title"></h2>
+                    
+                    <!-- Đánh giá sao -->
+                    <div class="modal-rating">
+                        <span id="modalStars">★★★★★</span>
+                        <span id="modalScore"> (5/5)</span>
+                    </div>
+                    
+                    <!-- Giới thiệu ngắn gọn -->
+                    <p id="modalDescription" class="modal-description"></p>
+                    
+                    <!-- Chi tiết phim: Năm, Thể loại, v.v -->
+                    <div class="modal-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Năm:</span>
+                            <span id="modalYear" class="detail-value"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Thể loại:</span>
+                            <span id="modalCategory" class="detail-value"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Loại:</span>
+                            <span id="modalType" class="detail-value"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Đạo diễn:</span>
+                            <span id="modalDirector" class="detail-value">Chưa cập nhật</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Nút "Xem Ngay" để vào trang detail -->
+                    <button class="btn-watch-now" id="btnWatchNow" onclick="goToDetail()">
+                        ▶ XEM NGAY
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SCRIPT: XỬ LÝ LOGIC PHIM, MODAL, VÀ FAVORITE -->
+    <!-- ============================================ -->
     <script>
-            // URL API backend - backend chạy trên port 5000, KHÔNG phải 8000
+        // URL API backend - backend chạy trên port 5000, KHÔNG phải 8000
         const API_URL = 'http://localhost:5000/api/movies';
         let currentPage = 1;
         const limit = 12;
+        // Biến lưu thông tin phim hiện tại được click (để sử dụng khi bấm "Xem Ngay")
+        let currentSelectedMovie = null;
+
+        // ============================================
+        // XỬ LÝ YÊU THÍCH (FAVORITES)
+        // ============================================
+
+        async function toggleFavorite(movieId, button) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                if (typeof window.showToast === 'function') {
+                    window.showToast('Vui lòng đăng nhập để thêm phim vào yêu thích', 'warning', 2500);
+                } else {
+                    alert('Vui lòng đăng nhập để thêm phim vào yêu thích');
+                }
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+                return;
+            }
+
+            if (!movieId) {
+                console.error('Movie ID không hợp lệ:', movieId);
+                if (typeof window.showToast === 'function') {
+                    window.showToast('Lỗi: Không xác định được phim. Vui lòng thử lại.', 'error');
+                }
+                return;
+            }
+
+            try {
+                const icon = button.querySelector('.heart-icon');
+                const isFavorited = icon.textContent === '❤️';
+
+                // Gọi API toggle favorite
+                const response = await fetch(`http://localhost:5000/api/favorites/${movieId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.data && typeof data.data.isFavorite === 'boolean') {
+                    if (data.data.isFavorite) {
+                        icon.textContent = '❤️';
+                        button.classList.add('favorited');
+                        if (typeof window.showToast === 'function') {
+                            window.showToast('Đã thêm vào danh sách yêu thích ❤️', 'success');
+                        }
+                    } else {
+                        icon.textContent = '🤍';
+                        button.classList.remove('favorited');
+                        if (typeof window.showToast === 'function') {
+                            window.showToast('Đã bỏ khỏi danh sách yêu thích', 'info');
+                        }
+                    }
+                } else {
+                    // Fallback: toggle dựa vào UI cũ
+                    if (isFavorited) {
+                        icon.textContent = '🤍';
+                        button.classList.remove('favorited');
+                    } else {
+                        icon.textContent = '❤️';
+                        button.classList.add('favorited');
+                    }
+                }
+            } catch (error) {
+                console.error('Lỗi khi toggle favorite:', error);
+                if (typeof window.showToast === 'function') {
+                    window.showToast('Không thể cập nhật yêu thích', 'error');
+                }
+            }
+        }
+
+        async function loadFavoriteStatus() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const response = await fetch('http://localhost:5000/api/favorites', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    console.error('Lỗi khi load favorite status');
+                    return;
+                }
+
+                const data = await response.json();
+                if (!data || !data.data) {
+                    console.log('Không có dữ liệu favorite');
+                    return;
+                }
+
+                const favoriteMovies = data.data.data || data.data;
+                if (!Array.isArray(favoriteMovies)) {
+                    console.error('favoriteMovies không phải array');
+                    return;
+                }
+
+                const favoriteIds = favoriteMovies.map(m => m._id || m.id);
+
+                favoriteIds.forEach(movieId => {
+                    const button = document.querySelector(`[data-movie-id="${movieId}"]`);
+                    if (button) {
+                        const icon = button.querySelector('.heart-icon');
+                        icon.textContent = '❤️';
+                        button.classList.add('favorited');
+                    }
+                });
+            } catch (error) {
+                console.error('Lỗi khi load favorite status:', error);
+            }
+        }
+
+        function viewMovie(id) {
+            window.location.href = `detail.html?id=${id}`;
+        }
 
         // --- HÀM CHÍNH ĐỂ TẢI DỮ LIỆU ---
         async function loadMovies() {
@@ -277,8 +713,17 @@
             grid.innerHTML = movies.map(movie => `
             <div class="movie-card">
                 <span class="badge">${movie.type === 'phim_le' ? 'Phim Lẻ' : 'Phim Bộ'}</span>
-                <img src="${movie.thumbnail}" alt="${movie.title}" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
-                <div class="movie-info">
+                <img src="${movie.thumbnail}" alt="${movie.title}" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'" style="cursor: pointer;" onclick="viewMovie('${movie._id || movie.id}')">
+                
+                <!-- Icon yêu thích (góc trên bên phải) -->
+                <button class="favorite-btn" 
+                        data-movie-id="${movie._id || movie.id}"
+                        title="Thêm vào yêu thích"
+                        style="position: absolute; top: 10px; right: 10px; background: rgba(0, 0, 0, 0.5); border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; z-index: 10;">
+                    <i class="heart-icon">🤍</i>
+                </button>
+                
+                <div class="movie-info" style="cursor: pointer;" onclick="viewMovie('${movie._id || movie.id}')">
                     <h3>${movie.title}</h3>
                     <div class="movie-meta">
                         <span>📅 ${movie.year}</span> | 📂 ${movie.category}
@@ -286,6 +731,18 @@
                 </div>
             </div>
         `).join('');
+
+            // Attach event listeners cho nút yêu thích
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const movieId = this.getAttribute('data-movie-id');
+                    toggleFavorite(movieId, this);
+                });
+            });
+
+            // Load trạng thái yêu thích
+            loadFavoriteStatus();
         }
 
         // --- CẬP NHẬT PHÂN TRANG ---
@@ -381,4 +838,110 @@
             // Gọi loadMovies() sau khi đã điền tất cả filter từ URL
             loadMovies();
         };
+
+        // ============================================
+        // HÀM XỬ LÝ MODAL POPUP - HIỂN THỊ CHI TIẾT PHIM
+        // ============================================
+
+        /**
+         * Hàm mở modal và hiển thị thông tin chi tiết của phim được click
+         * @param {Object} movie - Object chứa thông tin phim từ API
+         */
+        function openMovieModal(movie) {
+            // Lưu thông tin phim hiện tại để dùng khi bấm "Xem Ngay"
+            currentSelectedMovie = movie;
+
+            // Điền dữ liệu vào các trường trong modal
+            document.getElementById('modalPoster').src = movie.thumbnail || 'https://via.placeholder.com/250x350';
+            document.getElementById('modalTitle').textContent = movie.title || 'Không có tên';
+            document.getElementById('modalDescription').textContent = movie.description || 'Chưa có mô tả';
+            document.getElementById('modalYear').textContent = movie.year || 'Chưa cập nhật';
+            document.getElementById('modalCategory').textContent = movie.category || 'Chưa cập nhật';
+            
+            // Hiển thị loại phim (Phim Lẻ hay Phim Bộ)
+            const movieType = movie.type === 'phim_le' ? 'Phim Lẻ' : (movie.type === 'phim_bo' ? 'Phim Bộ' : 'Chưa xác định');
+            document.getElementById('modalType').textContent = movieType;
+
+            // Lấy đánh giá từ dữ liệu phim
+            // API trả về field avgRating (từ backend controller)
+            const rating = movie.avgRating || movie.rating || movie.score || 5;
+            // Chuyển rating thành số sao (mỗi điểm = 1 sao, tối đa 5 sao)
+            const stars = '★'.repeat(Math.min(Math.round(rating), 5)) + '☆'.repeat(Math.max(5 - Math.round(rating), 0));
+            document.getElementById('modalStars').textContent = stars;
+            document.getElementById('modalScore').textContent = ` (${rating}/5)`;
+
+            // Hiển thị modal (bỏ display: none)
+            const modal = document.getElementById('movieModal');
+            modal.style.display = 'flex';
+        }
+
+        /**
+         * Hàm đóng modal khi click X hoặc click overlay
+         */
+        function closeMovieModal() {
+            const modal = document.getElementById('movieModal');
+            modal.style.display = 'none';
+            // Xóa thông tin phim hiện tại
+            currentSelectedMovie = null;
+        }
+
+        /**
+         * Hàm chuyển hướng sang trang detail.html khi bấm "Xem Ngay"
+         * Sử dụng currentSelectedMovie để lấy movie ID
+         */
+        function goToDetail() {
+            if (currentSelectedMovie && currentSelectedMovie._id) {
+                // Chuyển sang trang detail.html?id=...
+                window.location.href = `detail.html?id=${currentSelectedMovie._id}`;
+            } else {
+                console.error('Không có thông tin phim để chuyển hướng');
+                alert('Lỗi: Không thể xác định phim. Vui lòng thử lại.');
+            }
+        }
+
+        /**
+         * Hàm renderMovies được cập nhật để thêm event listener click
+         * Khi click vào movie-card, sẽ mở modal hiển thị chi tiết
+         */
+        const originalRenderMovies = window.renderMovies;
+        function renderMovies(movies) {
+            const grid = document.getElementById('movie-grid');
+            if (!movies || movies.length === 0) {
+                grid.innerHTML = '<p style="text-align:center; width:100%; color: #ccc; padding: 50px;">Không tìm thấy phim phù hợp.</p>';
+                return;
+            }
+
+            // Hiển thị danh sách phim
+            grid.innerHTML = movies.map(movie => `
+                <div class="movie-card" data-movie-id="${movie._id}">
+                    <span class="badge">${movie.type === 'phim_le' ? 'Phim Lẻ' : 'Phim Bộ'}</span>
+                    <img src="${movie.thumbnail}" alt="${movie.title}" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'" />
+                    <div class="movie-info">
+                        <h3 title="${movie.title}">${movie.title}</h3>
+                        <div class="movie-meta">
+                            <span>📅 ${movie.year} | 📂 ${movie.category}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Sau khi render xong, thêm event listener cho mỗi movie-card
+            // Khi user click vào movie-card, sẽ mở modal
+            const movieCards = document.querySelectorAll('.movie-card');
+            movieCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Lấy ID phim từ attribute data-movie-id
+                    const movieId = this.getAttribute('data-movie-id');
+                    // Tìm object phim tương ứng trong danh sách
+                    const selectedMovie = movies.find(m => m._id === movieId);
+                    if (selectedMovie) {
+                        // Mở modal với thông tin phim
+                        openMovieModal(selectedMovie);
+                    }
+                });
+            });
+        }
+
+        // Ghi đè renderMovies để sử dụng phiên bản mới có modal
+        window.renderMovies = renderMovies;
     </script>

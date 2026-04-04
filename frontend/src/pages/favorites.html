@@ -5,8 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phim yêu thích - VFLIX</title>
+    <link rel="stylesheet" href="../styles/toast.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../services/theme.js"></script>
+    <script>
+        // Buộc dark mode cho trang favorites
+        document.documentElement.classList.add('dark');
+    </script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -51,6 +56,10 @@
         </div>
 
         <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+            <a href="./index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-neutral-400 hover:text-white hover:bg-neutral-800/30 transition-all duration-300 group">
+                <iconify-icon icon="solar:home-linear" stroke-width="1.5" class="text-lg group-hover:scale-110 transition-transform"></iconify-icon>
+                Trang chủ
+            </a>
             <a href="./profile.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-neutral-400 hover:text-white hover:bg-neutral-800/30 transition-all duration-300 group">
                 <iconify-icon icon="solar:user-linear" stroke-width="1.5" class="text-lg group-hover:scale-110 transition-transform"></iconify-icon>
                 Hồ sơ
@@ -115,14 +124,14 @@
                 </div>
                 <h3 class="text-lg font-medium text-white mb-2">Chưa có phim yêu thích</h3>
                 <p class="text-neutral-500 max-w-xs mx-auto mb-6">Hãy thêm những bộ phim bạn thích vào danh sách để xem lại bất cứ lúc nào!</p>
-                <a href="/" class="px-6 py-2 bg-neutral-800 hover:bg-neutral-700 text-white rounded-xl transition-all border border-neutral-700">Khám phá ngay</a>
+                <a href="./index.html" class="px-6 py-2 bg-neutral-800 hover:bg-neutral-700 text-white rounded-xl transition-all border border-neutral-700">Khám phá ngay</a>
             </div>
         </div>
     </main>
 
     <!-- Mobile Bottom Navigation -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-neutral-950/90 backdrop-blur-xl border-t border-neutral-800/60 z-50 flex items-center justify-around p-2 pb-safe shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
-        <a href="/" class="flex flex-col items-center gap-1 p-2 text-neutral-400 hover:text-white transition-colors">
+        <a href="./index.html" class="flex flex-col items-center gap-1 p-2 text-neutral-400 hover:text-white transition-colors">
             <iconify-icon icon="solar:home-linear" stroke-width="1.5" class="text-xl"></iconify-icon>
             <span class="text-xs font-medium">Trang chủ</span>
         </a>
@@ -142,6 +151,7 @@
     </nav>
     
     <script src="../services/api.js"></script>
+    <script src="../services/toast.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             if (!localStorage.getItem('token')) {
@@ -183,17 +193,20 @@
                 const grid = document.getElementById('favoritesGrid');
                 grid.innerHTML = ''; // Clear loading
 
-                if (res.success && res.data.length > 0) {
-                    res.data.forEach(movie => {
+                // Backend trả về: { success, data: { count, data: [movies] }, message }
+                const movies = res.data?.data || res.data || [];
+                
+                if (res.success && movies.length > 0) {
+                    movies.forEach(movie => {
                         const card = document.createElement('div');
                         card.className = 'group relative movie-card block cursor-pointer transition-all duration-300 hover:-translate-y-2';
                         card.innerHTML = `
                             <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-lg border border-neutral-800/50">
-                                <img src="${movie.poster}" alt="${movie.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <img src="${movie.thumbnail || movie.poster || 'https://via.placeholder.com/200x300'}" alt="${movie.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
                                     <div class="flex items-center gap-2 mb-1">
                                          <iconify-icon icon="solar:star-bold" class="text-yellow-400 text-sm"></iconify-icon>
-                                         <span class="text-white text-xs font-bold">${movie.rating || 0}</span>
+                                         <span class="text-white text-xs font-bold">${movie.avgRating || movie.rating || 5}</span>
                                     </div>
                                     <button onclick="toggleFav(event, '${movie._id}')" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-rose-500 hover:bg-rose-500 hover:text-white transition-all">
                                         <iconify-icon icon="solar:heart-bold"></iconify-icon>
@@ -225,10 +238,20 @@
             try {
                 const res = await API.toggleFavorite(id);
                 if (res.success) {
-                    window.location.reload(); // Simple approach for now
+                    // Hiển thị toast dựa vào kết quả
+                    if (res.data && res.data.isFavorite === false) {
+                        window.showToast('Đã xóa khỏi danh sách yêu thích', 'info', 2000);
+                    } else {
+                        window.showToast('Đã thêm vào danh sách yêu thích', 'success', 2000);
+                    }
+                    // Reload sau 1.5s để thấy toast
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
                 }
             } catch (err) {
                 console.error(err);
+                window.showToast('Không thể cập nhật yêu thích', 'error');
             }
         }
     </script>

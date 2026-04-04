@@ -6,41 +6,56 @@
     <title>Xem Phim - Chi Tiết</title>
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/detail.css">
+    <link rel="stylesheet" href="../styles/toast.css">
 </head>
 <body>
     <nav class="card flex-between" style="border-radius: 0; padding: 15px 20px;">
         <h2 class="text-primary" style="margin: 0;">🎥 XemPhim</h2>
-        <a href="index.html" class="text-light">Quay lại Trang chủ</a>
+        <a href="index.html" class="text-light">← Quay lại Trang chủ</a>
     </nav>
 
     <main class="container mt-4 mb-5 fade-in">
+        <!-- VIDEO PLAYER -->
         <div class="video-player-wrapper shadow-lg">
-            <video id="moviePlayer" controls autoplay>
+            <video id="moviePlayer" controls>
                 <source src="" type="video/mp4">
                 Trình duyệt của bạn không hỗ trợ thẻ video.
             </video>
         </div>
 
+        <!-- THÔNG TIN PHIM -->
         <div class="card mt-3 slide-in-up">
-            <h1 id="movieTitle">Đang tải thông tin phim...</h1>
-            <div class="flex gap-2 text-muted mb-2" id="movieMeta">
+            <div style="display: flex; justify-content: space-between; align-items: start; gap: 20px; margin-bottom: 20px;">
+                <div style="flex: 1;">
+                    <h1 id="movieTitle" style="margin-top: 0;">Đang tải thông tin phim...</h1>
+                    <div class="flex gap-2 text-muted mb-2" id="movieMeta"></div>
+                    <p id="movieDesc" class="text-light" style="line-height: 1.6;">...</p>
                 </div>
-            <p id="movieDesc" class="text-light opacity-75">...</p>
+                <button class="favorite-btn-detail" id="favoriteBtn" title="Thêm vào yêu thích" 
+                        style="background: #e50914; border: none; padding: 10px 20px; color: white; border-radius: 50%; width: 50px; height: 50px; font-size: 24px; cursor: pointer; flex-shrink: 0;">
+                    🤍
+                </button>
+            </div>
         </div>
 
+        <!-- DANH SÁCH TẬP PHIM -->
         <div class="card mt-3 slide-in-up">
-            <h3>Danh sách tập</h3>
+            <h3>📺 Danh sách tập phim</h3>
             <div id="episodesList" class="flex gap-1" style="flex-wrap: wrap; margin-top: 15px;">
-                </div>
+                <p class="text-muted">Đang tải...</p>
+            </div>
         </div>
 
+        <!-- PHẦN BÌNH LUẬN & ĐÁNH GIÁ -->
         <div id="comment-section" class="card mt-3 slide-in-up">
-            <h3 class="text-primary">Bình luận & Đánh giá</h3>
-            <p class="text-muted">Component bình luận của Nhất sẽ được nhúng vào đây.</p>
+            <!-- Nội dung sẽ được tạo bởi comments.js -->
         </div>
     </main>
 
+    <!-- Load các JavaScript modules theo thứ tự -->
     <script src="../services/api.js"></script>
+    <script src="../services/toast.js"></script>
+    <script src="../modules/movie/comments.js"></script>
     <script src="../modules/movie/detail.js"></script>
 </body>
 </html>

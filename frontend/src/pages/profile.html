@@ -7,6 +7,10 @@
     <title>Hồ sơ cá nhân - VFLIX</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../services/theme.js"></script>
+    <script>
+        // Buộc dark mode cho trang profile
+        document.documentElement.classList.add('dark');
+    </script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -68,6 +72,12 @@
     <!-- Mobile Top Bar -->
     <div
         class="md:hidden flex items-center justify-between p-4 border-b border-neutral-200 dark:border-neutral-800/40 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md relative z-20 shrink-0">
+        <!-- Nút quay lại trang chủ -->
+        <a href="./index.html" class="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
+            <iconify-icon icon="solar:arrow-left-linear" class="text-xl"></iconify-icon>
+            <span class="text-sm font-medium">Trang chủ</span>
+        </a>
+        
         <div class="text-xl font-bold tracking-tighter text-neutral-900 dark:text-white flex items-center gap-2">
             <div
                 class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-lg">
@@ -93,6 +103,12 @@
         </div>
 
         <nav class="flex-1 p-6 space-y-1.5 overflow-y-auto">
+            <!-- Link về Trang chủ -->
+            <a href="./index.html"
+                class="flex items-center gap-3 px-5 py-3.5 rounded-2xl text-sm font-medium text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/30 transition-all duration-300">
+                <iconify-icon icon="solar:home-linear" class="text-xl"></iconify-icon>
+                <span>Trang chủ</span>
+            </a>
             <a href="./profile.html"
                 class="flex items-center gap-3 px-5 py-3.5 rounded-2xl text-sm font-semibold text-cyan-600 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-950/30 border border-cyan-100 dark:border-cyan-900/50 shadow-sm relative overflow-hidden group">
                 <div

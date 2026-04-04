@@ -17,6 +17,24 @@
     object-fit: contain;
 }
 
+/* Nút yêu thích trên trang chi tiết */
+.favorite-btn-detail {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    transition: all 0.3s ease !important;
+}
+
+.favorite-btn-detail:hover {
+    transform: scale(1.1) !important;
+    box-shadow: 0 0 15px rgba(229, 9, 20, 0.6) !important;
+}
+
+.favorite-btn-detail.favorited {
+    background: #ff0a16 !important;
+}
+
 /* Nút chọn tập phim */
 .episode-btn {
     padding: 10px 20px;
@@ -39,4 +57,314 @@
     color: #000;
     border-color: var(--primary-color);
     font-weight: bold;
+}
+
+/* ==================== PHẦN ĐÁNH GIÁ & BÌNH LUẬN ==================== */
+
+/* Đường kẻ phân cách */
+.divider {
+    border: none;
+    border-top: 1px solid var(--input-border);
+    margin: 30px 0;
+    opacity: 0.3;
+}
+
+/* ========== RATING (ĐÁNH GIÁ SAO) ========== */
+
+.rating-container {
+    margin-bottom: 30px;
+}
+
+/* Tóm tắt đánh giá */
+.rating-summary {
+    background: var(--input-bg);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.average-rating {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.rating-number {
+    font-size: 3em;
+    font-weight: bold;
+    color: var(--primary-color);
+    line-height: 1;
+}
+
+.stars-display {
+    display: flex;
+    gap: 5px;
+}
+
+.rating-count {
+    color: var(--muted-text);
+    font-size: 0.95em;
+}
+
+/* Sao đánh giá */
+.star {
+    font-size: 1.8em;
+    color: var(--input-border);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+/* Sao đã được tô màu */
+.star.filled {
+    color: #FFD700; /* Màu vàng */
+}
+
+/* Sao dùng để input (có thể click) */
+.star-input:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.6));
+}
+
+/* Sao trung bình (chỉ hiển thị, không click được) */
+.star-avg {
+    cursor: default;
+    font-size: 1.5em;
+}
+
+/* Phần đánh giá của user */
+.user-rating {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid var(--input-border);
+}
+
+.stars-input {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* Thông báo cần đăng nhập */
+.login-prompt {
+    text-align: center;
+    padding: 20px;
+    background: var(--input-bg);
+    border-radius: 10px;
+}
+
+.login-prompt a {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-prompt a:hover {
+    text-decoration: underline;
+}
+
+/* ========== COMMENTS (BÌNH LUẬN) ========== */
+
+.comments-container {
+    margin-top: 20px;
+}
+
+/* Form nhập bình luận */
+.comment-form {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+    padding: 20px;
+    background: var(--input-bg);
+    border-radius: 12px;
+}
+
+.user-avatar {
+    flex-shrink: 0;
+}
+
+.user-avatar img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary-color);
+}
+
+.comment-input-wrapper {
+    flex: 1;
+}
+
+.comment-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    color: var(--fg-text);
+    font-family: inherit;
+    font-size: 0.95em;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.comment-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+}
+
+.comment-textarea::placeholder {
+    color: var(--muted-text);
+}
+
+.comment-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.comment-actions .btn {
+    padding: 8px 20px;
+    font-size: 0.9em;
+}
+
+/* Danh sách bình luận */
+.comments-list {
+    margin-top: 20px;
+}
+
+.comment-item {
+    display: flex;
+    gap: 12px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--input-border);
+    animation: slideInUp 0.3s ease;
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+}
+
+.comment-avatar {
+    flex-shrink: 0;
+}
+
+.comment-avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comment-content {
+    flex: 1;
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.comment-author {
+    font-weight: bold;
+    color: var(--fg-text);
+    font-size: 0.95em;
+}
+
+.comment-time {
+    color: var(--muted-text);
+    font-size: 0.85em;
+}
+
+.comment-text {
+    color: var(--fg-text);
+    line-height: 1.5;
+    margin: 8px 0;
+    word-wrap: break-word;
+}
+
+.comment-actions {
+    margin-top: 8px;
+}
+
+.btn-delete-comment {
+    background: none;
+    border: none;
+    color: var(--secondary-color);
+    font-size: 0.85em;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.btn-delete-comment:hover {
+    background: rgba(244, 67, 54, 0.1);
+    color: #ff5252;
+}
+
+/* Trạng thái loading */
+.loading-comments {
+    text-align: center;
+    padding: 30px;
+}
+
+/* Không có bình luận */
+.no-comments {
+    text-align: center;
+    padding: 40px 20px;
+    background: var(--input-bg);
+    border-radius: 10px;
+}
+
+/* Lỗi khi load */
+.error-message {
+    text-align: center;
+    padding: 30px;
+    background: rgba(244, 67, 54, 0.1);
+    border-radius: 10px;
+    border: 1px solid var(--secondary-color);
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 768px) {
+    .comment-form {
+        flex-direction: column;
+    }
+    
+    .average-rating {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .rating-number {
+        font-size: 2.5em;
+    }
+    
+    .star {
+        font-size: 1.5em;
+    }
+    
+    .star-input {
+        font-size: 2em;
+    }
+}
+
+/* ========== ANIMATIONS ========== */
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

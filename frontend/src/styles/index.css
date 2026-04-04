@@ -365,7 +365,6 @@ a {
   position: relative;
   border-radius: 12px;
   overflow: hidden;
-  cursor: pointer;
   transition: transform 0.3s ease;
   background: #333;
 }
@@ -380,6 +379,46 @@ a {
   height: 270px;
   object-fit: cover;
   display: block;
+}
+
+/* Nút yêu thích (góc trên bên phải) */
+.favorite-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.favorite-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
+}
+
+.favorite-btn .heart-icon {
+  font-size: 20px;
+  transition: all 0.2s ease;
+  display: block;
+  line-height: 1;
+}
+
+/* Trạng thái đã yêu thích */
+.favorite-btn.favorited {
+  background: rgba(255, 0, 0, 0.2);
+}
+
+.favorite-btn.favorited:hover {
+  background: rgba(255, 0, 0, 0.3);
 }
 
 /* Thông tin phim (gradient overlay) */
@@ -407,6 +446,217 @@ a {
   padding: 40px;
   font-size: 18px;
   color: #ff7a00;
+}
+
+/* ============================================
+   CSS CHO MODAL POPUP - HIỂN THỊ CHI TIẾT PHIM
+   ============================================ */
+
+/* Container modal chính */
+.movie-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Overlay (nền tối phía sau modal) - click để đóng */
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+}
+
+/* Nội dung modal (cái box chứa info phim) */
+.modal-content {
+  position: relative;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  border: 2px solid #ff7a00;
+  border-radius: 12px;
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(255, 122, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Hiệu ứng modal xuất hiện (từ dưới lên) */
+@keyframes slideIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Nút X đóng modal (góc trên phải) */
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: #ff7a00;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  background: #ffaa00;
+  transform: scale(1.1);
+}
+
+/* Layout chính của modal: 2 cột (poster + info) */
+.modal-body {
+  display: flex;
+  gap: 30px;
+  padding: 40px;
+  align-items: flex-start;
+}
+
+/* Cột 1: Poster phim bên trái */
+.modal-poster {
+  flex-shrink: 0;
+}
+
+.modal-poster img {
+  width: 250px;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  border: 2px solid #ff7a00;
+}
+
+/* Cột 2: Thông tin chi tiết phim bên phải */
+.modal-info {
+  flex: 1;
+  color: white;
+}
+
+/* Tiêu đề phim */
+.modal-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ff7a00;
+  margin: 0 0 15px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Rating (sao) */
+.modal-rating {
+  font-size: 18px;
+  color: #ffc107;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Mô tả/giới thiệu phim */
+.modal-description {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #ddd;
+  margin-bottom: 25px;
+  text-align: justify;
+}
+
+/* Chi tiết phim: các dòng thông tin */
+.modal-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #ff7a00;
+}
+
+/* Mỗi dòng chi tiết */
+.detail-item {
+  display: flex;
+  gap: 15px;
+  font-size: 14px;
+}
+
+.detail-label {
+  color: #999;
+  min-width: 80px;
+  font-weight: bold;
+}
+
+.detail-value {
+  color: #fff;
+  flex: 1;
+}
+
+/* Nút "Xem Ngay" - nút chính để vào trang detail */
+.btn-watch-now {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #ff7a00, #ffaa00);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 5px 15px rgba(255, 122, 0, 0.4);
+}
+
+.btn-watch-now:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 122, 0, 0.6);
+  background: linear-gradient(135deg, #ffaa00, #ffbb00);
+}
+
+/* Responsive design cho mobile */
+@media (max-width: 768px) {
+  .modal-body {
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .modal-poster img {
+    width: 150px;
+    height: 220px;
+  }
+
+  .modal-title {
+    font-size: 20px;
+  }
+
+  .modal-content {
+    max-width: 95%;
+  }
 }
 
 /* ============================================

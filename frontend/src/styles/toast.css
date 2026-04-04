@@ -1,0 +1,247 @@
+/* ==================== TOAST NOTIFICATION STYLES ====================
+ *
+ * CSS cho hệ thống toast notification
+ * Thiết kế hiện đại, mượt mà với animations
+ */
+
+/* Container chứa tất cả toast - góc trên bên phải */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+/* Mobile: đưa toast xuống dưới để không che menu */
+@media (max-width: 768px) {
+  .toast-container {
+    top: auto;
+    bottom: 80px; /* Trên mobile bottom nav */
+    left: 20px;
+    right: 20px;
+  }
+}
+
+/* Base toast style */
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 320px;
+  max-width: 400px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
+              0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  pointer-events: auto;
+  
+  /* Animation mặc định */
+  opacity: 0;
+  transform: translateX(400px);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .toast {
+    background: rgba(30, 30, 30, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Toast hiển thị */
+.toast-show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Toast ẩn */
+.toast-hide {
+  opacity: 0;
+  transform: translateX(400px) scale(0.8);
+}
+
+/* Icon container */
+.toast-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Content area */
+.toast-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.toast-message {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #1a1a1a;
+}
+
+@media (prefers-color-scheme: dark) {
+  .toast-message {
+    color: #e5e5e5;
+  }
+}
+
+/* Close button */
+.toast-close {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
+}
+
+.toast-close:hover {
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .toast-close {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .toast-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* ==================== TOAST TYPES ==================== */
+
+/* Success - Xanh lá */
+.toast-success {
+  border-left: 4px solid #10b981;
+}
+
+.toast-success .toast-icon {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Error - Đỏ */
+.toast-error {
+  border-left: 4px solid #ef4444;
+}
+
+.toast-error .toast-icon {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* Warning - Vàng cam */
+.toast-warning {
+  border-left: 4px solid #f59e0b;
+}
+
+.toast-warning .toast-icon {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+/* Info - Xanh dương */
+.toast-info {
+  border-left: 4px solid #3b82f6;
+}
+
+.toast-info .toast-icon {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 480px) {
+  .toast {
+    min-width: auto;
+    max-width: 100%;
+    padding: 14px 16px;
+  }
+  
+  .toast-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+  
+  .toast-message {
+    font-size: 13px;
+  }
+}
+
+/* ==================== ANIMATIONS ==================== */
+
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(400px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toast-slide-out {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(400px) scale(0.8);
+  }
+}
+
+/* Progress bar (optional - có thể thêm sau) */
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.2);
+  animation: toast-progress-bar 3s linear forwards;
+  border-radius: 0 0 0 12px;
+}
+
+@keyframes toast-progress-bar {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}

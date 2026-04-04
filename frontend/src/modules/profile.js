@@ -23,6 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (avatarInput) {
         avatarInput.addEventListener('change', handleAvatarChange);
     }
+
+    // Logout Button Handler
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+    }
 });
 
 /**
@@ -207,6 +213,64 @@ function showToast(message, type = 'success') {
         toast.classList.remove('translate-x-[150%]');
         setTimeout(() => toast.classList.add('translate-x-[150%]'), 3000);
     } else {
-        alert(message);
+        // Fallback to window.showToast if available
+        if (typeof window.showToast === 'function') {
+            window.showToast(message, type === 'success' ? 'success' : 'error');
+        } else {
+            alert(message);
+        }
+    }
+}
+
+/**
+ * Handle Logout
+ */
+async function handleLogout() {
+    try {
+        // Hiển thị xác nhận trước
+        const confirmed = confirm('Bạn chắc chắn muốn đăng xuất?');
+        if (!confirmed) return;
+
+        console.log('🔐 Đang đăng xuất...');
+        
+        // Gọi API logout
+        await API.logout();
+        
+        console.log('✅ Đăng xuất thành công');
+
+        // Xóa dữ liệu lưu trữ
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('redirectAfterLogin');
+
+        // Hiển thị thông báo
+        if (typeof window.showToast === 'function') {
+            window.showToast('Đã đăng xuất thành công', 'success');
+        } else {
+            alert('Đã đăng xuất thành công');
+        }
+
+        // Chuyển về trang login
+        setTimeout(() => {
+            window.location.href = './login.html';
+        }, 1500);
+
+    } catch (error) {
+        console.error('❌ Lỗi khi đăng xuất:', error);
+        
+        // Dù có lỗi, vẫn xóa token và redirect
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        
+        if (typeof window.showToast === 'function') {
+            window.showToast('Đã đăng xuất (có lỗi kết nối)', 'warning');
+        } else {
+            alert('Đã đăng xuất');
+        }
+
+        // Redirect về login
+        setTimeout(() => {
+            window.location.href = './login.html';
+        }, 1000);
     }
 }
