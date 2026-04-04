@@ -10,8 +10,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. HÀM TẢI DANH SÁCH PHIM LÊN BẢNG
     async function loadMovies() {
         try {
-            // Tạm dùng fetch gọi trực tiếp API bạn vừa làm
-            const response = await fetch('http://localhost:5000/api/admin/movies');
+            // ✅ Lấy token từ localStorage để gửi Authorization header
+            const token = localStorage.getItem('token');
+            
+            if (!token) {
+                movieTableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">❌ Chưa đăng nhập! Vui lòng đăng nhập lại.</td></tr>`;
+                return;
+            }
+            
+            // ✅ Gửi request với Authorization header
+            const response = await fetch('http://localhost:5000/api/admin/movies', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            // ✅ Kiểm tra nếu token hết hạn (401) thì chuyển sang login
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = './login.html';
+                return;
+            }
+            
             const result = await response.json();
             
             if (result.success) {
@@ -128,7 +151,27 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('hidden');
     });
 
-    document.getElementById('btnCloseModal').addEventListener('click', closeModal);
+    // ✅ Tìm nút close (X) - có thể là btnCloseModal hoặc modal-close
+    const closeBtn = document.getElementById('btnCloseModal') || document.querySelector('.modal-close') || modal.querySelector('[data-close="true"]');
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
+    
+    // ✅ Đóng modal khi click ngoài modal (vào dark overlay)
+    modal.addEventListener('click', (e) => {
+        // Chỉ đóng nếu click trực tiếp vào modal, không phải content bên trong
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+    
+    // ✅ Đóng modal khi ấn ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            closeModal();
+        }
+    });
 
     function closeModal() {
         modal.classList.add('hidden');

@@ -180,10 +180,13 @@ loginForm.addEventListener('submit', async (e) => {
                 localStorage.removeItem('rememberEmail');
             }
 
-            // Hiển thị thông báo thành công và chuyển sang trang chủ
+            // Hiển thị thông báo thành công và chuyển sang trang chủ hoặc admin
             window.showToast('Đăng nhập thành công! Đang chuyển hướng...', 'success', 2000);
             setTimeout(() => {
-                window.location.href = './index.html';
+                // ✅ Kiểm tra nếu user là admin thì chuyển sang trang admin
+                // ❌ Nếu là user thường thì chuyển sang index.html
+                const redirectPage = (user && user.role === 'admin') ? './admin.html' : './index.html';
+                window.location.href = redirectPage;
             }, 1500);
         } else {
             // API trả về nhưng không có token → hiển thị thông báo lỗi
@@ -238,7 +241,10 @@ window.addEventListener('DOMContentLoaded', () => {
                         localStorage.setItem('user', JSON.stringify(response.data));
                         window.showToast('Đăng nhập Google thành công! Đang chuyển hướng...', 'success', 2000);
                         setTimeout(() => {
-                            window.location.href = './index.html';
+                            // ✅ Kiểm tra nếu user là admin thì chuyển sang trang admin
+                            // ❌ Nếu là user thường thì chuyển sang index.html
+                            const redirectPage = (response.data && response.data.role === 'admin') ? './admin.html' : './index.html';
+                            window.location.href = redirectPage;
                         }, 1500);
                     }
                 })

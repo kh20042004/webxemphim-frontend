@@ -713,7 +713,7 @@
             grid.innerHTML = movies.map(movie => `
             <div class="movie-card">
                 <span class="badge">${movie.type === 'phim_le' ? 'Phim Lẻ' : 'Phim Bộ'}</span>
-                <img src="${movie.thumbnail}" alt="${movie.title}" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'" style="cursor: pointer;" onclick="viewMovie('${movie._id || movie.id}')">
+                <img src="${movie.thumbnail}" alt="${movie.title}" onerror="this.src='https://picsum.photos/seed/movie/300/450'" style="cursor: pointer;" onclick="viewMovie('${movie._id || movie.id}')">
                 
                 <!-- Icon yêu thích (góc trên bên phải) -->
                 <button class="favorite-btn" 
@@ -852,7 +852,7 @@
             currentSelectedMovie = movie;
 
             // Điền dữ liệu vào các trường trong modal
-            document.getElementById('modalPoster').src = movie.thumbnail || 'https://via.placeholder.com/250x350';
+            document.getElementById('modalPoster').src = movie.thumbnail || 'https://picsum.photos/seed/movie/250/350';
             document.getElementById('modalTitle').textContent = movie.title || 'Không có tên';
             document.getElementById('modalDescription').textContent = movie.description || 'Chưa có mô tả';
             document.getElementById('modalYear').textContent = movie.year || 'Chưa cập nhật';
@@ -915,7 +915,7 @@
             grid.innerHTML = movies.map(movie => `
                 <div class="movie-card" data-movie-id="${movie._id}">
                     <span class="badge">${movie.type === 'phim_le' ? 'Phim Lẻ' : 'Phim Bộ'}</span>
-                    <img src="${movie.thumbnail}" alt="${movie.title}" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'" />
+                    <img src="${movie.thumbnail}" alt="${movie.title}" onerror="this.src='https://picsum.photos/seed/movie/300/450'" />
                     <div class="movie-info">
                         <h3 title="${movie.title}">${movie.title}</h3>
                         <div class="movie-meta">

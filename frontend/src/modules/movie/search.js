@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             const cardHtml = `
                 <div class="col">
                     <div class="card h-100 movie-card text-white">
-                        <img src="${movie.poster || 'https://via.placeholder.com/300x450'}" class="card-img-top movie-poster" alt="${movie.title}">
+                        <img src="${movie.poster || 'https://picsum.photos/seed/movie/300/450'}" class="card-img-top movie-poster" alt="${movie.title}">
                         <div class="card-body">
                             <h6 class="card-title text-truncate">${movie.title}</h6>
                             <div class="d-flex justify-content-between align-items-center">

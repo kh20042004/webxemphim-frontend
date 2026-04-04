@@ -199,28 +199,7 @@ async function handleChangePassword() {
     }
 }
 
-/**
- * Toast Utility
- */
-function showToast(message, type = 'success') {
-    // Look for toast in DOM (it's in profile.html footer now or should be)
-    // Actually I'll use a simple alert if toast element not found
-    const toast = document.getElementById('toast');
-    const toastMsg = document.getElementById('toastMsg');
-    
-    if (toast && toastMsg) {
-        toastMsg.textContent = message;
-        toast.classList.remove('translate-x-[150%]');
-        setTimeout(() => toast.classList.add('translate-x-[150%]'), 3000);
-    } else {
-        // Fallback to window.showToast if available
-        if (typeof window.showToast === 'function') {
-            window.showToast(message, type === 'success' ? 'success' : 'error');
-        } else {
-            alert(message);
-        }
-    }
-}
+// toast.js đã cung cấp window.showToast(), không cần định nghĩa lại tại đây
 
 /**
  * Handle Logout
@@ -250,9 +229,9 @@ async function handleLogout() {
             alert('Đã đăng xuất thành công');
         }
 
-        // Chuyển về trang login
+        // Chuyển về trang index
         setTimeout(() => {
-            window.location.href = './login.html';
+            window.location.href = './index.html';
         }, 1500);
 
     } catch (error) {
@@ -268,9 +247,9 @@ async function handleLogout() {
             alert('Đã đăng xuất');
         }
 
-        // Redirect về login
+        // Redirect về index
         setTimeout(() => {
-            window.location.href = './login.html';
+            window.location.href = './index.html';
         }, 1000);
     }
 }

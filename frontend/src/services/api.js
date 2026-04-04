@@ -318,6 +318,40 @@ async function uploadFileAPI(formData) {
 }
 
 // ============================================
+// SPORTS ENDPOINTS
+// ============================================
+
+// GET /api/sports/leagues
+async function getLeaguesAPI() {
+    return apiRequest('/sports/leagues');
+}
+
+// GET /api/sports/matches/upcoming
+async function getUpcomingMatchesAPI() {
+    return apiRequest('/sports/matches/upcoming');
+}
+
+// GET /api/sports/matches/live
+async function getLiveMatchesAPI() {
+    return apiRequest('/sports/matches/live');
+}
+
+// GET /api/sports/events/live
+async function getLiveEventsAPI() {
+    return apiRequest('/sports/events/live');
+}
+
+// GET /api/sports/highlights
+async function getHighlightsAPI() {
+    return apiRequest('/sports/highlights');
+}
+
+// GET /api/sports/highlights/trending
+async function getTrendingHighlightsAPI() {
+    return apiRequest('/sports/highlights/trending');
+}
+
+// ============================================
 // EXPORT ALL FUNCTIONS
 // ============================================
 
@@ -376,6 +410,14 @@ const API = {
     updateMovie: updateMovieAPI,
     deleteMovie: deleteMovieAPI,
     uploadFile: uploadFileAPI,
+
+    // Sports - Thể thao
+    getLeagues: getLeaguesAPI,
+    getUpcomingMatches: getUpcomingMatchesAPI,
+    getLiveMatches: getLiveMatchesAPI,
+    getLiveEvents: getLiveEventsAPI,
+    getHighlights: getHighlightsAPI,
+    getTrendingHighlights: getTrendingHighlightsAPI,
 };
 
 // Make API available globally

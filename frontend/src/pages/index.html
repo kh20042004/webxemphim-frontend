@@ -44,8 +44,8 @@
       <a href="#" onclick="event.preventDefault(); filterByText('Truyền hình')">Truyền hình</a>
       <a href="#" onclick="event.preventDefault(); filterByText('Phim bộ')">Phim bộ</a>
       <a href="#" onclick="event.preventDefault(); filterByText('TV show')">TV show</a>
-      <a href="#" onclick="event.preventDefault(); filterByText('Thiếu nhi')">Thiếu nhi</a>
-      <a href="#" onclick="event.preventDefault(); filterByText('Thể thao')">Thể thao</a>
+      <a href="./kids.html">Thiếu nhi</a>
+      <a href="./sports.html">Thể thao</a>
     </div>
     
     <div class="menu-actions">
@@ -180,7 +180,7 @@
       currentSelectedMovie = movie;
 
       // Điền dữ liệu vào các trường trong modal
-      document.getElementById('modalPoster').src = movie.thumbnail || 'https://via.placeholder.com/250x350';
+      document.getElementById('modalPoster').src = movie.thumbnail || 'https://picsum.photos/seed/movie/250/350';
       document.getElementById('modalTitle').textContent = movie.title || 'Không có tên';
       document.getElementById('modalDescription').textContent = movie.description || 'Chưa có mô tả';
       document.getElementById('modalYear').textContent = movie.year || 'Chưa cập nhật';

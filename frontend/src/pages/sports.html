@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thể Thao - FPT Play</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../styles/sports.css">
+</head>
+<body>
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <!-- Logo -->
+            <div class="navbar-logo" onclick="window.location.href='./index.html'" style="cursor: pointer;">
+                <span class="logo-play">▶</span>
+                <span class="logo-text">FPT Play</span>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput"
+                    placeholder="Tìm phim..." 
+                    autocomplete="off"
+                >
+                <button class="search-btn" id="searchBtn">🔍</button>
+            </div>
+
+            <!-- Navigation Menu -->
+            <ul class="navbar-menu">
+                <li><a href="./index.html" class="nav-link">Truyền hình</a></li>
+                <li><a href="./index.html" class="nav-link">Phim bộ</a></li>
+                <li><a href="./index.html" class="nav-link">TV show</a></li>
+                <li><a href="./index.html" class="nav-link">Thiếu nhi</a></li>
+                <li><a href="./sports.html" class="nav-link active">Thể thao</a></li>
+            </ul>
+
+            <!-- Action Buttons -->
+            <div class="navbar-actions">
+                <button class="btn btn-promotion" onclick="window.location.href='./movies.html'">Phim chiều rạp</button>
+                <button class="btn btn-vip" onclick="window.location.href='./subscription.html'">Gói VIP</button>
+                <div class="user-menu">
+                    <button class="user-btn" id="userBtn" onclick="window.location.href='./profile.html'">👤</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO BANNER ==================== -->
+    <div class="sports-hero">
+        <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&h=600&fit=crop" alt="Sports Banner" class="hero-image">
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content">
+            <div class="hero-badge">Thể thao - Sôi động</div>
+            <h1 class="hero-title">Ngoại Hạng Anh</h1>
+            <p class="hero-description">Theo dõi những trận đấu bóng đá kịch tính nhất từ các giải đấu hàng đầu thế giới</p>
+            
+            <div class="hero-buttons">
+                <button class="btn btn-play">
+                    <span class="play-icon">▶</span> Xem Ngay
+                </button>
+                <button class="btn btn-info">ℹ️ Thêm Thông Tin</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="sports-main">
+        <!-- ==================== UPCOMING MATCHES ==================== -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">⚽ Trận Đấu Sắp Tới</h2>
+                <a href="#" class="view-all">Xem tất cả →</a>
+            </div>
+
+            <div class="horizontal-scroll">
+                <div class="scroll-container" id="upcomingMatchesContainer">
+                    <p class="loading">⏳ Đang tải dữ liệu...</p>
+                </div>
+
+                <!-- Scroll Indicators -->
+                <button class="scroll-arrow scroll-left" id="scrollLeft">❮</button>
+                <button class="scroll-arrow scroll-right" id="scrollRight">❯</button>
+            </div>
+        </section>
+
+        <!-- ==================== LIVE NOW ==================== -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">🔴 Đang Phát Sóng</h2>
+                <a href="#" class="view-all">Xem tất cả →</a>
+            </div>
+
+            <div class="horizontal-scroll">
+                <div class="scroll-container" id="liveMatchesContainer">
+                    <p class="loading">⏳ Đang tải dữ liệu...</p>
+                </div>
+
+                <!-- Scroll Indicators -->
+                <button class="scroll-arrow scroll-left" id="scrollLeftLive">❮</button>
+                <button class="scroll-arrow scroll-right" id="scrollRightLive">❯</button>
+            </div>
+        </section>
+
+        <!-- ==================== FEATURED LEAGUES ==================== -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">🏆 Giải Đấu Nổi Bật</h2>
+                <a href="#" class="view-all">Xem tất cả →</a>
+            </div>
+
+            <div class="horizontal-scroll">
+                <div class="scroll-container" id="leaguesContainer">
+                    <p class="loading">⏳ Đang tải dữ liệu...</p>
+                </div>
+
+                <button class="scroll-arrow scroll-left" id="scrollLeft2">❮</button>
+                <button class="scroll-arrow scroll-right" id="scrollRight2">❯</button>
+            </div>
+        </section>
+
+        <!-- ==================== LIVE EVENTS ==================== -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">📺 Sự Kiện Trực Tiếp</h2>
+                <a href="#" class="view-all">Xem tất cả →</a>
+            </div>
+
+            <div class="horizontal-scroll">
+                <div class="scroll-container" id="liveEventsContainer">
+                    <p class="loading">⏳ Đang tải dữ liệu...</p>
+                </div>
+
+                <button class="scroll-arrow scroll-left" id="scrollLeft3">❮</button>
+                <button class="scroll-arrow scroll-right" id="scrollRight3">❯</button>
+            </div>
+        </section>
+
+        <!-- ==================== TOP HIGHLIGHT VIDEOS ==================== -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">🎬 Video Nổi Bật</h2>
+                <a href="#" class="view-all">Xem tất cả →</a>
+            </div>
+
+            <div class="horizontal-scroll">
+                <div class="scroll-container" id="highlightsContainer">
+                    <p class="loading">⏳ Đang tải dữ liệu...</p>
+                </div>
+
+                <button class="scroll-arrow scroll-left" id="scrollLeft4">❮</button>
+                <button class="scroll-arrow scroll-right" id="scrollRight4">❯</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 FPT Play - Sports Module. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- ==================== LEAGUE MODAL ==================== -->
+    <div id="leagueModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalLeagueName" class="modal-title">Giải Đấu</h2>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-tabs">
+                    <button class="tab-btn active" data-tab="matches">Trận Đấu</button>
+                    <button class="tab-btn" data-tab="teams">Đội Bóng</button>
+                </div>
+                
+                <!-- Matches Tab -->
+                <div class="tab-content" id="matchesTab">
+                    <div id="leagueMatches" class="matches-list">
+                        <p class="loading">⏳ Đang tải...</p>
+                    </div>
+                </div>
+
+                <!-- Teams Tab -->
+                <div class="tab-content" id="teamsTab" style="display:none;">
+                    <div id="leagueTeams" class="teams-grid">
+                        <p class="loading">⏳ Đang tải...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <!-- API Service -->
+    <script src="../services/api.js"></script>
+    
+    <!-- Sports Module -->
+    <script src="../modules/sports/sports.js"></script>
+</body>
+</html>

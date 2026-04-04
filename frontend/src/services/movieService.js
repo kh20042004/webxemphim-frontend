@@ -61,7 +61,7 @@ function renderMovies(movies) {
     grid.innerHTML = movies.map(movie => `
         <div class="movie-card" onclick="goToDetail('${movie._id}')">
             <span class="badge">${movie.type === 'phim_le' ? 'Phim Lẻ' : 'Phim Bộ'}</span>
-            <img src="${movie.thumbnail || movie.posterUrl}" alt="${movie.title}" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
+            <img src="${movie.thumbnail || movie.posterUrl}" alt="${movie.title}" onerror="this.src='https://picsum.photos/seed/movie/300/450'">
             <div class="movie-info">
                 <h3>${movie.title}</h3>
                 <div class="movie-meta">

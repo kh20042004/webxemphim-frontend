@@ -202,7 +202,7 @@
                         card.className = 'group relative movie-card block cursor-pointer transition-all duration-300 hover:-translate-y-2';
                         card.innerHTML = `
                             <div class="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-lg border border-neutral-800/50">
-                                <img src="${movie.thumbnail || movie.poster || 'https://via.placeholder.com/200x300'}" alt="${movie.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <img src="${movie.thumbnail || movie.poster || 'https://picsum.photos/seed/movie/200/300'}" alt="${movie.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
                                     <div class="flex items-center gap-2 mb-1">
                                          <iconify-icon icon="solar:star-bold" class="text-yellow-400 text-sm"></iconify-icon>

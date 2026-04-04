@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiếu Nhi - FPT Play</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #fff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        .navbar {
+            background: linear-gradient(to right, #5a8a9e, #4a7a8e);
+            border-bottom: 1px solid #3a6a7e;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-container {
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            gap: 30px;
+        }
+
+        .navbar-logo {
+            display: none;
+        }
+
+        .search-bar {
+            flex: 0;
+            display: none;
+        }
+
+        .navbar-menu {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+            flex: 1;
+            justify-content: flex-start;
+        }
+
+        .navbar-menu a {
+            color: #1a1a1a;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: opacity 0.3s;
+            padding: 8px 0;
+            border-bottom: none;
+        }
+
+        .navbar-menu a:hover,
+        .navbar-menu a.active {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        .navbar-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-promotion {
+            display: none;
+        }
+
+        .btn-vip {
+            background: #ffeb3b;
+            color: #000;
+            font-weight: 700;
+            padding: 8px 20px;
+        }
+
+        .btn-vip:hover {
+            background: #ffd700;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-btn {
+            background: #888;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+
+        .user-btn:hover {
+            opacity: 0.7;
+        }
+
+        /* ==================== HERO SECTION ==================== */
+        .hero {
+            display: none;
+        }
+
+        /* ==================== CONTENT GRID ==================== */
+        .kids-main {
+            max-width: 100%;
+            margin: 0;
+            padding: 30px;
+            background: #3a3a3a;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: block;
+            color: #fff;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .movie-card {
+            background: transparent;
+            border-radius: 0;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: none;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        }
+
+        .movie-poster {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .movie-info {
+            padding: 12px 0;
+        }
+
+        .movie-title {
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.4;
+            color: #ccc;
+        }
+
+        /* ==================== MODAL STYLES ==================== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 0;
+            position: relative;
+        }
+
+        .modal-header {
+            background: linear-gradient(to right, #5a8a9e, #4a7a8e);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: white;
+            font-size: 20px;
+        }
+
+        .modal-close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close-btn:hover {
+            opacity: 0.8;
+        }
+
+        .modal-body {
+            padding: 30px;
+            display: flex;
+            gap: 30px;
+        }
+
+        .modal-poster {
+            flex-shrink: 0;
+            width: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-info {
+            flex: 1;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            margin: 0 0 15px 0;
+        }
+
+        .modal-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #bbb;
+            flex-wrap: wrap;
+        }
+
+        .modal-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .modal-description {
+            color: #ddd;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-watch {
+            background: linear-gradient(135deg, #e50914, #c40812);
+            color: white;
+        }
+
+        .btn-watch:hover {
+            background: linear-gradient(135deg, #ff1623, #d40812);
+            transform: translateY(-2px);
+        }
+
+        .btn-close {
+            background: #444;
+            color: white;
+        }
+
+        .btn-close:hover {
+            background: #555;
+        }
+
+        @media (max-width: 600px) {
+            .modal-body {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .modal-poster {
+                width: 120px;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 16px;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 16px;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1024px) {
+            .movies-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-container {
+                flex-wrap: wrap;
+            }
+
+            .movies-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .kids-main {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .movies-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .navbar-menu {
+                gap: 20px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <!-- Logo -->
+            <div class="navbar-logo" onclick="window.location.href='./index.html'" style="cursor: pointer;">
+                <span class="logo-play">▶</span>
+                <span class="logo-text">FPT Play</span>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput"
+                    placeholder="Tìm phim..." 
+                    autocomplete="off"
+                >
+            </div>
+
+            <!-- Navigation Menu -->
+            <ul class="navbar-menu">
+                <li><a href="./index.html" class="nav-link">Truyền hình</a></li>
+                <li><a href="./index.html" class="nav-link">Phim bộ</a></li>
+                <li><a href="./index.html" class="nav-link">TV show</a></li>
+                <li><a href="./kids.html" class="nav-link active">Thiếu nhi</a></li>
+                <li><a href="./sports.html" class="nav-link">Thể thao</a></li>
+            </ul>
+
+            <!-- Action Buttons -->
+            <div class="navbar-actions">
+                <button class="btn btn-promotion" onclick="window.location.href='./movies.html'">Phim chiều rạp</button>
+                <button class="btn btn-vip" onclick="window.location.href='./subscription.html'">Gói VIP</button>
+                <div class="user-menu">
+                    <button class="user-btn" id="userBtn" onclick="window.location.href='./profile.html'">👤</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO BANNER ==================== -->
+    <div class="hero">
+        <img id="heroBg" src="https://images.unsplash.com/photo-1570303008752-481f3f6cbbf8?w=1200&h=400&fit=crop" alt="Kids Banner" class="hero-bg">
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content">
+            <div class="hero-badge">👶 Thiếu Nhi - Vui Nhộn</div>
+            <h1 class="hero-title" id="heroTitle">Doraemon</h1>
+            <p class="hero-description" id="heroDesc">Theo dõi những cuộc phiêu lưu thú vị của Doraemon và những người bạn</p>
+            
+            <div class="hero-buttons">
+                <button class="btn btn-play" onclick="playHeroVideo()">
+                    <span>▶</span> Xem Ngay
+                </button>
+                <button class="btn btn-info">ℹ️ Thêm Thông Tin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="kids-main">
+        <!-- Phim Thiếu Nhi -->
+        <div>
+            <h2 class="section-title">👶 Phim Thiếu Nhi</h2>
+            <div class="movies-grid" id="kidsMoviesGrid">
+                <p class="loading">⏳ Đang tải phim...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- ==================== MODAL GIỚI THIỆU PHIM ==================== -->
+    <div class="modal" id="movieModal">
+        <div class="modal-content">
+            <!-- Header với nút đóng -->
+            <div class="modal-header">
+                <h2>Chi tiết phim</h2>
+                <button class="modal-close-btn" onclick="closeMovieModal()">✕</button>
+            </div>
+
+            <!-- Nội dung modal: hình poster + thông tin phim -->
+            <div class="modal-body">
+                <!-- Poster phim -->
+                <div class="modal-poster">
+                <img id="modalPosterImg" src="" alt="Poster phim" onerror="this.src='https://picsum.photos/seed/movie/150/225'">
+                </div>
+
+                <!-- Thông tin phim -->
+                <div class="modal-info">
+                    <!-- Tên phim -->
+                    <h2 class="modal-title" id="modalTitle">Tên phim</h2>
+
+                    <!-- Meta thông tin: Năm, Thể loại, Loại phim -->
+                    <div class="modal-meta" id="modalMeta">
+                        <div class="modal-meta-item">
+                            <span>📅</span>
+                            <span id="modalYear">-</span>
+                        </div>
+                        <div class="modal-meta-item">
+                            <span>🎬</span>
+                            <span id="modalType">-</span>
+                        </div>
+                        <div class="modal-meta-item">
+                            <span>🎭</span>
+                            <span id="modalCategory">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Mô tả phim -->
+                    <p class="modal-description" id="modalDescription">Mô tả phim</p>
+
+                    <!-- Nút hành động: Xem ngay và Đóng -->
+                    <div class="modal-footer">
+                        <button class="modal-btn btn-watch" onclick="watchMovieNow()">
+                            ▶ Xem Ngay
+                        </button>
+                        <button class="modal-btn btn-close" onclick="closeMovieModal()">
+                            Đóng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script src="../services/toast.js"></script>
+    <script src="../services/api.js" defer></script>
+    
+    <script>
+        const BACKEND_ORIGIN = 'http://localhost:5000';
+
+        function resolveMovieImageUrl(imageUrl) {
+            if (!imageUrl || typeof imageUrl !== 'string') {
+                return 'https://picsum.photos/seed/kidsmovie/300/450';
+            }
+
+            if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://') || imageUrl.startsWith('data:')) {
+                return imageUrl;
+            }
+
+            const normalizedPath = imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`;
+            return `${BACKEND_ORIGIN}${normalizedPath}`;
+        }
+
+        const FALLBACK_KIDS_MOVIES = [
+            {
+                _id: '',
+                title: 'Doraemon: Nobita và Đảo Giấu Vàng',
+                thumbnail: 'https://image.tmdb.org/t/p/w500/9iEH7xod4Zt3kqQ8nQmB6J0xk2R.jpg'
+            },
+            {
+                _id: '',
+                title: 'Minions: Sự Trỗi Dậy Của Gru',
+                thumbnail: 'https://image.tmdb.org/t/p/w500/wKiOkZTN9lUUUNZLmtnwubZYONg.jpg'
+            },
+            {
+                _id: '',
+                title: 'Kung Fu Panda',
+                thumbnail: 'https://image.tmdb.org/t/p/w500/wWt4JYXTg5Wr3xBW2phBrMKgp3x.jpg'
+            },
+            {
+                _id: '',
+                title: 'Coco - Hội Ngộ Diệu Kỳ',
+                thumbnail: 'https://image.tmdb.org/t/p/w500/gGEsBPAijhVUFoiNpgZXqRVWJt2.jpg'
+            },
+            {
+                _id: '',
+                title: 'Frozen - Nữ Hoàng Băng Giá',
+                thumbnail: 'https://image.tmdb.org/t/p/w500/mbPrrbt8bSLcHSBCHnRclPlMZPl.jpg'
+            },
+            {
+                _id: '',
+                title: 'How To Train Your Dragon',
+                thumbnail: 'https://image.tmdb.org/t/p/w500/ygGmAO60t8GyqUo9xYeYxSZAR3b.jpg'
+            }
+        ];
+
+        // ==================== LOAD KIDS MOVIES ====================
+        async function loadKidsMovies() {
+            try {
+                console.log('📡 Đang tải phim thiếu nhi...');
+
+                // Try to get animation movies which are typically for kids
+                const [animationResponse, familyResponse] = await Promise.all([
+                    API.getMovies({ type: 'Hoạt hình', limit: 30 }),
+                    API.getMovies({ category: 'Gia đình', limit: 30 })
+                ]);
+
+                const allMovies = [
+                    ...(animationResponse?.data || []),
+                    ...(familyResponse?.data || [])
+                ];
+                
+                const uniqueMovies = [];
+                const seenKeys = new Set();
+
+                allMovies.forEach((movie) => {
+                    const key = movie._id || movie.id || movie.title;
+                    if (!key || seenKeys.has(key)) return;
+                    seenKeys.add(key);
+                    uniqueMovies.push(movie);
+                });
+
+                const movies = uniqueMovies.length > 0 ? uniqueMovies : FALLBACK_KIDS_MOVIES;
+                console.log('✅ Phim thiếu nhi:', movies);
+
+                renderKidsMovies(movies);
+            } catch (error) {
+                console.error('❌ Lỗi khi tải phim thiếu nhi:', error);
+                renderKidsMovies(FALLBACK_KIDS_MOVIES);
+            }
+        }
+
+        // ==================== RENDER KIDS MOVIES ====================
+        // Hàm này chịu trách nhiệm render (hiển thị) danh sách phim thiếu nhi ra HTML
+        function renderKidsMovies(movies) {
+            const grid = document.getElementById('kidsMoviesGrid');
+            if (!grid) return;
+
+            // Nếu không có phim, hiển thị thông báo
+            if (movies.length === 0) {
+                grid.innerHTML = '<p class="no-data">Chưa có phim thiếu nhi nào</p>';
+                return;
+            }
+
+            // Tạo HTML cho từng phim
+            const html = movies.map(movie => {
+                const posterUrl = resolveMovieImageUrl(movie.thumbnail || movie.poster);
+                return `
+                <div class="movie-card" onclick="openMovieModal('${movie._id || ''}', '${(movie.title || '').replace(/'/g, "\\'")}', '${(movie.description || '').replace(/'/g, "\\'")}', '${posterUrl}', '${movie.year || 'N/A'}', '${movie.type || '-'}', '${movie.category || '-'}')">
+                    <img 
+                        src="${posterUrl}" 
+                        alt="${movie.title}" 
+                        class="movie-poster"
+                        onerror="this.src='https://picsum.photos/seed/kidsmovie/300/450'"
+                    >
+                    <div class="movie-info">
+                        <div class="movie-title">${movie.title}</div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+
+            grid.innerHTML = html;
+        }
+
+        // ==================== QUẢN LÝ MODAL ====================
+        // Biến lưu trữ ID phim hiện tại trong modal (để sử dụng khi bấm "Xem ngay")
+        let currentMovieId = '';
+
+        // Hàm mở modal giới thiệu phim
+        function openMovieModal(movieId, title, description, poster, year, type, category) {
+            // Lưu ID phim để khi bấm "Xem ngay" có thể sử dụng
+            currentMovieId = movieId;
+
+            const safePosterUrl = resolveMovieImageUrl(poster);
+
+            // Cập nhật thông tin hiển thị trong modal
+            document.getElementById('modalPosterImg').src = safePosterUrl;
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalYear').textContent = year;
+            document.getElementById('modalType').textContent = type;
+            document.getElementById('modalCategory').textContent = category;
+            document.getElementById('modalDescription').textContent = description;
+
+            // Hiển thị modal
+            document.getElementById('movieModal').classList.add('active');
+
+            // Chặn scroll trang khi modal mở
+            document.body.style.overflow = 'hidden';
+
+            console.log('📺 Mở modal giới thiệu phim:', title);
+        }
+
+        // Hàm đóng modal
+        function closeMovieModal() {
+            // Ẩn modal
+            document.getElementById('movieModal').classList.remove('active');
+
+            // Cho phép scroll lại trang
+            document.body.style.overflow = 'auto';
+
+            // Xóa ID phim hiện tại
+            currentMovieId = '';
+
+            console.log('❌ Đóng modal giới thiệu phim');
+        }
+
+        // Hàm chuyển sang trang chi tiết phim khi bấm "Xem ngay"
+        function watchMovieNow() {
+            // Nếu có ID phim thì chuyển sang trang detail.html
+            if (currentMovieId) {
+                console.log('▶️ Chuyển sang trang chi tiết phim:', currentMovieId);
+                window.location.href = `./detail.html?id=${currentMovieId}`;
+            } else {
+                // Nếu không có ID (phim từ fallback data), hiển thị thông báo
+                window.showToast('Không thể xem phim này. Vui lòng thử lại!', 'error');
+            }
+        }
+
+        // Đóng modal khi bấm ngoài modal (click vào vùng dark overlay)
+        window.addEventListener('click', (event) => {
+            const modal = document.getElementById('movieModal');
+            if (event.target === modal) {
+                closeMovieModal();
+            }
+        });
+
+        // Đóng modal khi bấm phím ESC
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeMovieModal();
+            }
+        });
+
+        // ==================== PLAY HERO VIDEO ====================
+        function playHeroVideo() {
+            // TODO: Implement play hero video
+            window.showToast('Tính năng sắp phát hành!', 'info');
+        }
+
+        // ==================== SEARCH FUNCTIONALITY ====================
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const keyword = searchInput.value.trim();
+                    if (keyword) {
+                        // Redirect to search page
+                        window.location.href = `./index.html?search=${encodeURIComponent(keyword)}`;
+                    }
+                }
+            });
+        }
+
+        // ==================== INITIALIZE PAGE ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🎬 Kids page initializing...');
+            loadKidsMovies();
+        });
+    </script>
+</body>
+</html>

@@ -73,6 +73,21 @@ app.get('/search.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/src/pages/search.html'));
 });
 
+// Direct access to sports.html (trang thể thao)
+app.get('/sports.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/src/pages/sports.html'));
+});
+
+// Direct access to kids.html (trang thiếu nhi)
+app.get('/kids.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/src/pages/kids.html'));
+});
+
+// Favicon route - ngăn chặn lỗi 404 khi browser yêu cầu favicon
+app.get('/favicon.ico', (req, res) => {
+  res.status(204).end(); // 204 No Content - tránh lỗi 404
+});
+
 // ==================== 404 HANDLER ====================
 // Với các route không khớp, trả về 404 thay vì login.html
 // Việc redirect sang login phải do JavaScript phía client xử lý (kiểm tra token)
