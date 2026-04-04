@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/admin.css">
 </head>
+
 <body>
     <nav class="card flex-between" style="border-radius: 0; padding: 15px 20px;">
         <h2 class="text-secondary" style="margin: 0;">🛠️ Admin Panel</h2>
@@ -44,11 +46,13 @@
         <div class="modal-content card slide-in-up">
             <div class="flex-between mb-3">
                 <h3 id="modalTitle">Thêm Phim Mới</h3>
-                <button class="btn-close" id="btnCloseModal">✖</button>
+                <button class="btn btn-close" id="btnCloseModal">❌</button>
             </div>
-            
+
             <form id="movieForm">
-                <input type="hidden" id="movieId"> <div class="mb-2">
+                <input type="hidden" id="movieId" value="">
+
+                <div class="mb-2">
                     <label class="text-muted">Tên phim:</label>
                     <input type="text" id="movieTitle" style="width: 100%;" required>
                 </div>
@@ -78,6 +82,12 @@
                     </div>
                 </div>
 
+                <div class="mb-2">
+                    <label class="text-muted">Link Video (Tập Full):</label>
+                    <input type="text" id="movieVideoUrl" style="width: 100%;" placeholder="VD: https://youtube.com/..."
+                        required>
+                </div>
+
                 <div class="mb-3">
                     <label class="text-muted">Poster Ảnh Bìa (Tùy chọn):</label>
                     <input type="file" id="moviePosterFile" accept="image/*" style="width: 100%;">
@@ -92,4 +102,5 @@
     <script src="../services/api.js"></script>
     <script src="../modules/movie/admin.js"></script>
 </body>
+
 </html>
