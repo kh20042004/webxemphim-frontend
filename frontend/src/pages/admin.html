@@ -16,30 +16,57 @@
     </nav>
 
     <main class="container mt-4 mb-5 fade-in">
-        <div class="flex-between mb-3">
-            <h2>Quản lý Kho Phim</h2>
-            <button class="btn btn-primary" id="btnOpenAddModal">➕ Thêm Phim Mới</button>
+        <div class="admin-tabs mb-4">
+            <button class="tab-btn active" data-target="movieSection">🎬 Quản lý Phim</button>
+            <button class="tab-btn" data-target="userSection">👥 Quản lý Người dùng</button>
         </div>
 
-        <div class="card overflow-x-auto">
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Hình ảnh</th>
-                        <th>Tên phim</th>
-                        <th>Thể loại</th>
-                        <th>Định dạng</th>
-                        <th>Lượt xem</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody id="movieTableBody">
-                    <tr>
-                        <td colspan="6" class="text-center text-muted">Đang tải dữ liệu...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <section id="movieSection" class="tab-content active">
+            <div class="flex-between mb-3">
+                <h2>Quản lý Kho Phim</h2>
+                <button class="btn btn-primary" id="btnOpenAddModal">➕ Thêm Phim Mới</button>
+            </div>
+            <div class="card overflow-x-auto">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Hình ảnh</th>
+                            <th>Tên phim</th>
+                            <th>Thể loại</th>
+                            <th>Định dạng</th>
+                            <th>Lượt xem</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="movieTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="userSection" class="tab-content hidden">
+            <div class="mb-3">
+                <h2>Danh sách Thành viên</h2>
+            </div>
+            <div class="card overflow-x-auto">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Avatar</th>
+                            <th>Họ tên</th>
+                            <th>Email</th>
+                            <th>Vai trò</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <tr>
+                            <td colspan="6" class="text-center">Đang tải người dùng...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </main>
 
     <div id="movieModal" class="modal-overlay hidden">

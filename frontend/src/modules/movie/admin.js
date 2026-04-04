@@ -206,3 +206,86 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.add('hidden');
     }
 });
+
+// --- LOGIC CHUYỂN TAB ---
+const tabButtons = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
+
+tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-target');
+
+        // Đổi trạng thái nút
+        tabButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Hiện section tương ứng
+        tabContents.forEach(content => {
+            content.classList.add('hidden');
+            if (content.id === target) content.classList.remove('hidden');
+        });
+
+        // Nếu chuyển sang tab User thì load dữ liệu User
+        if (target === 'userSection') loadUsers();
+    });
+});
+
+// --- LOGIC QUẢN LÝ USER ---
+async function loadUsers() {
+    const userTableBody = document.getElementById('userTableBody');
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/api/admin/users', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const result = await response.json();
+
+        if (result.success) {
+            renderUserTable(result.data);
+        }
+    } catch (error) {
+        userTableBody.innerHTML = `<tr><td colspan="6" class="text-center">Lỗi tải người dùng</td></tr>`;
+    }
+}
+
+function renderUserTable(users) {
+    const userTableBody = document.getElementById('userTableBody');
+    userTableBody.innerHTML = '';
+
+    users.forEach(user => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><img src="${user.avatar || '../assets/images/default-avatar.png'}" class="avatar-sm"></td>
+            <td>${user.fullName}</td>
+            <td>${user.email}</td>
+            <td><span class="badge">${user.role}</span></td>
+            <td>
+                <span class="${user.isActive ? 'text-success' : 'text-danger'}">
+                    ${user.isActive ? '● Đang hoạt động' : '● Đã bị khóa'}
+                </span>
+            </td>
+            <td>
+                <button class="btn ${user.isActive ? 'btn-danger' : 'btn-success'}" 
+                        onclick="toggleUserStatus('${user._id}')">
+                    ${user.isActive ? '🚫 Khóa' : '🔓 Mở khóa'}
+                </button>
+            </td>
+        `;
+        userTableBody.appendChild(tr);
+    });
+}
+
+// Hàm khóa/mở khóa tài khoản
+window.toggleUserStatus = async (id) => {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch(`http://localhost:5000/api/admin/users/${id}/toggle-status`, {
+            method: 'PATCH',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const result = await response.json();
+        if (result.success) loadUsers(); // Load lại bảng sau khi đổi trạng thái
+    } catch (error) {
+        alert('Lỗi thao tác người dùng');
+    }
+};
