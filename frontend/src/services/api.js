@@ -200,6 +200,11 @@ async function rateMovieAPI(ratingData) {
     });
 }
 
+// GET /api/ratings/:movieId - Lấy thống kê đánh giá của phim
+async function getRatingStatsAPI(movieId) {
+    return apiRequest(`/ratings/${movieId}`);
+}
+
 // ============================================
 // HISTORY ENDPOINTS
 // ============================================
@@ -390,6 +395,7 @@ const API = {
 
     // Ratings
     rateMovie: rateMovieAPI,
+    getRatingStats: getRatingStatsAPI,
 
     // History
     getWatchHistory: getWatchHistoryAPI,

@@ -31,6 +31,15 @@ async function initComments(movieId) {
     // Load danh sách comments từ server
     await loadComments();
     
+    // Load thống kê đánh giá
+    await loadRatingStats();
+    
+    // Load đánh giá đã lưu của user
+    currentUserRating = getUserRatingFromCache(movieId);
+    if (currentUserRating > 0) {
+        updateStarsDisplay('starsInput', currentUserRating);
+    }
+    
     // Thiết lập các event listeners
     setupEventListeners();
 }
@@ -214,20 +223,65 @@ async function loadComments() {
  */
 async function loadRatingStats() {
     try {
-        // Gọi API lấy thống kê rating (cần thêm API endpoint này ở backend)
-        // Tạm thời dùng dữ liệu giả
-        const averageRating = 4.5;
-        const ratingCount = 128;
+        // Cố gắng lấy dữ liệu thực từ API
+        const response = await window.API.getRatingStats(currentMovieId);
         
-        // Cập nhật UI
-        document.getElementById('averageRating').textContent = averageRating.toFixed(1);
-        document.getElementById('ratingCount').textContent = `(${ratingCount} đánh giá)`;
-        
-        // Cập nhật sao trung bình
-        updateStarsDisplay('averageStars', averageRating);
-        
+        if (response && response.data) {
+            const averageRating = response.data.averageRating || 0;
+            const ratingCount = response.data.ratingCount || 0;
+            const userRating = response.data.userRating || 0;
+            
+            // Cập nhật biến toàn cục
+            currentUserRating = userRating;
+            
+            // Cập nhật UI
+            updateRatingDisplay(averageRating, ratingCount, userRating);
+            
+            console.log(`✅ Đã load thống kê từ API: ${averageRating} sao (${ratingCount} đánh giá)`);
+            return;
+        }
     } catch (error) {
-        console.error('❌ Lỗi khi load rating stats:', error);
+        console.warn('⚠️ Không thể lấy thống kê từ API:', error);
+    }
+    
+    // Fallback: Lấy từ localStorage
+    try {
+        const cachedStats = getCachedRatingStats(currentMovieId);
+        if (cachedStats) {
+            updateRatingDisplay(
+                cachedStats.averageRating || 0,
+                cachedStats.ratingCount || 0,
+                cachedStats.userRating || 0
+            );
+            console.log(`💾 Sử dụng thống kê từ cache: ${cachedStats.averageRating} sao`);
+            return;
+        }
+    } catch (error) {
+        console.warn('⚠️ Không thể lấy cache:', error);
+    }
+    
+    // Nếu không có dữ liệu, hiển thị 0
+    updateRatingDisplay(0, 0, 0);
+    console.log('ℹ️ Chưa có đánh giá nào');
+}
+
+/**
+ * Cập nhật giao diện hiển thị đánh giá
+ */
+function updateRatingDisplay(averageRating, ratingCount, userRating) {
+    if (document.getElementById('averageRating')) {
+        document.getElementById('averageRating').textContent = averageRating.toFixed(1);
+    }
+    if (document.getElementById('ratingCount')) {
+        document.getElementById('ratingCount').textContent = `(${ratingCount} đánh giá)`;
+    }
+    
+    // Cập nhật sao trung bình
+    updateStarsDisplay('averageStars', Math.round(averageRating));
+    
+    // Cập nhật sao của user nếu đã đánh giá
+    if (userRating > 0) {
+        updateStarsDisplay('starsInput', userRating);
     }
 }
 
@@ -354,13 +408,28 @@ async function handleStarClick(e) {
         
     } catch (error) {
         console.error('❌ Lỗi khi đánh giá:', error);
-        if (typeof window.showToast === 'function') {
-            window.showToast('Không thể gửi đánh giá. Vui lòng thử lại.', 'error');
-        } else {
-            alert('Không thể gửi đánh giá. Vui lòng thử lại.');
+        
+        // Fallback: Lưu đánh giá vào localStorage nếu API thất bại
+        try {
+            saveUserRatingToCache(currentMovieId, rating);
+            currentUserRating = rating;
+            updateStarsDisplay('starsInput', rating);
+            console.log('💾 Đánh giá đã được lưu cục bộ (chế độ offline)');
+            
+            if (typeof window.showToast === 'function') {
+                window.showToast(`Đánh giá lưu cục bộ - sẽ đồng bộ khi online ⭐`, 'info');
+            }
+        } catch (cacheError) {
+            console.error('❌ Lỗi lưu cache:', cacheError);
+            if (typeof window.showToast === 'function') {
+                window.showToast('Không thể gửi đánh giá. Vui lòng thử lại.', 'error');
+            } else {
+                alert('Không thể gửi đánh giá. Vui lòng thử lại.');
+            }
         }
     }
 }
+
 
 /**
  * Xử lý hover vào sao (hiệu ứng preview)
@@ -503,6 +572,78 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+// ==================== HÀM QUẢN LÝ CACHE ĐÁNH GIÁ ====================
+
+/**
+ * Lưu đánh giá của user vào localStorage cache
+ * @param {string} movieId - ID phim
+ * @param {number} rating - Số sao (1-5)
+ */
+function saveUserRatingToCache(movieId, rating) {
+    try {
+        const cache = JSON.parse(localStorage.getItem('ratingCache') || '{}');
+        cache[movieId] = {
+            rating: rating,
+            savedAt: new Date().toISOString(),
+            userId: currentUser?._id || 'anonymous',
+        };
+        localStorage.setItem('ratingCache', JSON.stringify(cache));
+        console.log(`💾 Lưu đánh giá vào cache: ${movieId} = ${rating} sao`);
+    } catch (error) {
+        console.error('❌ Lỗi lưu rating cache:', error);
+        throw error;
+    }
+}
+
+/**
+ * Lấy đánh giá của user từ cache
+ * @param {string} movieId - ID phim
+ * @returns {number} Số sao hoặc 0 nếu không có
+ */
+function getUserRatingFromCache(movieId) {
+    try {
+        const cache = JSON.parse(localStorage.getItem('ratingCache') || '{}');
+        return cache[movieId]?.rating || 0;
+    } catch (error) {
+        console.error('❌ Lỗi đọc user rating cache:', error);
+        return 0;
+    }
+}
+
+/**
+ * Lấy thống kê đánh giá từ cache
+ * @param {string} movieId - ID phim
+ * @returns {object|null} Thống kê hoặc null nếu không có
+ */
+function getCachedRatingStats(movieId) {
+    try {
+        const cache = JSON.parse(localStorage.getItem('ratingStatsCache') || '{}');
+        return cache[movieId] || null;
+    } catch (error) {
+        console.error('❌ Lỗi đọc rating stats cache:', error);
+        return null;
+    }
+}
+
+/**
+ * Lưu thống kê đánh giá vào cache (được gọi khi API thành công)
+ * @param {string} movieId - ID phim
+ * @param {object} stats - Thống kê gồm averageRating, ratingCount, userRating
+ */
+function cacheRatingStats(movieId, stats) {
+    try {
+        const cache = JSON.parse(localStorage.getItem('ratingStatsCache') || '{}');
+        cache[movieId] = {
+            ...stats,
+            cachedAt: new Date().toISOString(),
+        };
+        localStorage.setItem('ratingStatsCache', JSON.stringify(cache));
+        console.log(`💾 Lưu thống kê đánh giá vào cache: ${movieId}`);
+    } catch (error) {
+        console.error('❌ Lỗi lưu rating stats cache:', error);
+    }
 }
 
 // ==================== EXPORT ====================

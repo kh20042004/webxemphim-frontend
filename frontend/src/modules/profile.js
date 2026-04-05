@@ -93,6 +93,16 @@ async function updateStatsUI(user) {
     const statFavorites = document.getElementById('statFavorites');
     const statPlan = document.getElementById('statPlan');
 
+    function getLocalWatchHistoryCount() {
+        try {
+            const history = JSON.parse(localStorage.getItem('watchHistoryCache') || '[]');
+            return Array.isArray(history) ? history.length : 0;
+        } catch (error) {
+            console.warn('Failed to read local history cache', error);
+            return 0;
+        }
+    }
+
     if (statFavorites) statFavorites.textContent = user.favorites?.length || 0;
     if (statPlan) statPlan.textContent = (user.subscription?.plan || 'Free').toUpperCase();
 
@@ -100,9 +110,11 @@ async function updateStatsUI(user) {
         try {
             const historyRes = await API.getWatchHistory();
             if (historyRes.success) {
-                statHistory.textContent = historyRes.data.length;
+                const apiCount = Array.isArray(historyRes.data) ? historyRes.data.length : 0;
+                statHistory.textContent = apiCount > 0 ? apiCount : getLocalWatchHistoryCount();
             }
         } catch (e) {
+            statHistory.textContent = getLocalWatchHistoryCount();
             console.warn('Failed to load history stats');
         }
     }

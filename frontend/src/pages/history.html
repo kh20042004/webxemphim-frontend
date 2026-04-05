@@ -127,7 +127,7 @@
                 </div>
                 <h3 class="text-lg font-medium text-white mb-2">Lịch sử trống</h3>
                 <p class="text-neutral-500 max-w-xs mx-auto mb-6">Bạn chưa xem bộ phim nào gần đây.</p>
-                <a href="/" class="px-6 py-2 bg-neutral-800 hover:bg-neutral-700 text-white rounded-xl transition-all border border-neutral-700">Bắt đầu xem phim</a>
+                <a href="./movies.html" class="px-6 py-2 bg-neutral-800 hover:bg-neutral-700 text-white rounded-xl transition-all border border-neutral-700">Bắt đầu xem phim</a>
             </div>
         </div>
     </main>
@@ -163,6 +163,88 @@
     
     <script src="../services/api.js"></script>
     <script>
+        const BACKEND_ORIGIN = 'http://localhost:5000';
+
+        function resolvePosterUrl(imageUrl) {
+            if (!imageUrl || typeof imageUrl !== 'string') {
+                return 'https://dummyimage.com/300x168/1f2937/e5e7eb?text=No+Image';
+            }
+
+            if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://') || imageUrl.startsWith('data:')) {
+                return imageUrl;
+            }
+
+            return `${BACKEND_ORIGIN}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`;
+        }
+
+        function getLocalWatchHistory() {
+            try {
+                return JSON.parse(localStorage.getItem('watchHistoryCache') || '[]');
+            } catch (error) {
+                console.warn('Không đọc được watchHistoryCache:', error);
+                return [];
+            }
+        }
+
+        function normalizeHistoryItem(item) {
+            const movie = item.movieId && typeof item.movieId === 'object' ? item.movieId : null;
+
+            return {
+                id: movie?._id || movie?.id || item.movieId?._id || item.movieId?.id || item.movieId || item._id || item.id,
+                title: movie?.title || item.movieTitle || item.title || 'Không rõ tên',
+                poster: resolvePosterUrl(movie?.poster || movie?.thumbnail || item.moviePoster || item.poster),
+                updatedAt: item.updatedAt || item.watchedAt || new Date().toISOString(),
+                timestamp: item.timestamp || 0,
+            };
+        }
+
+        function renderHistoryEntries(entries) {
+            const container = document.getElementById('historyGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (!entries.length) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            container.innerHTML = '';
+
+            entries.map(normalizeHistoryItem).forEach((item) => {
+                const date = new Date(item.updatedAt);
+                const timeStr = date.toLocaleString('vi-VN', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    day: '2-digit',
+                    month: '2-digit'
+                });
+
+                const row = document.createElement('div');
+                row.className = 'group w-full bg-neutral-900/40 border border-neutral-800/60 p-4 rounded-2xl flex items-center gap-6 hover:border-cyan-500/30 hover:bg-neutral-800/40 transition-all cursor-pointer';
+
+                if (item.id) {
+                    row.onclick = () => window.location.href = `./detail.html?id=${item.id}`;
+                }
+
+                row.innerHTML = `
+                    <div class="w-24 md:w-32 aspect-video rounded-xl overflow-hidden shrink-0 border border-neutral-800">
+                        <img src="${item.poster}" class="w-full h-full object-cover" alt="${item.title}" onerror="this.src='https://dummyimage.com/300x168/1f2937/e5e7eb?text=No+Image'">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-white font-medium truncate mb-1 group-hover:text-cyan-400 transition-colors">${item.title}</h3>
+                        <div class="flex flex-wrap items-center gap-3 text-[10px] md:text-xs text-neutral-500">
+                             <span class="flex items-center gap-1"><iconify-icon icon="solar:clock-circle-linear"></iconify-icon> ${timeStr}</span>
+                             <span class="w-1 h-1 rounded-full bg-neutral-700"></span>
+                             <span class="text-cyan-500 font-medium">Tiến độ: ${Math.floor((item.timestamp || 0) / 60)} phút</span>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(row);
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', async () => {
             if (!localStorage.getItem('token')) {
                 window.location.href = './login.html';
@@ -173,7 +255,7 @@
                 document.getElementById('userNameDisplay').textContent = user.fullName;
                 document.getElementById('userPlanDisplay').textContent = (user.subscription?.plan || 'Free').toUpperCase() + ' Plan';
                 if (user.avatar) {
-                    const avatarUrl = user.avatar.startsWith('http') ? user.avatar : `http://localhost:3000/${user.avatar}`;
+                    const avatarUrl = user.avatar.startsWith('http') ? user.avatar : `http://localhost:5000/${user.avatar}`;
                     document.getElementById('sidebarAvatar').src = avatarUrl;
                     document.getElementById('mobileAvatar').src = avatarUrl;
                 }
@@ -185,40 +267,9 @@
             // Fetch History
             try {
                 const res = await API.getWatchHistory();
-                const container = document.getElementById('historyGrid');
-                container.innerHTML = '';
-
-                if (res.success && res.data.length > 0) {
-                    res.data.forEach(item => {
-                        const movie = item.movieId;
-                        const date = new Date(item.updatedAt);
-                         // Format as "Hôm qua lúc 20:30" or similar
-                        const timeStr = date.toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' });
-                        
-                        const row = document.createElement('div');
-                        row.className = 'group w-full bg-neutral-900/40 border border-neutral-800/60 p-4 rounded-2xl flex items-center gap-6 hover:border-cyan-500/30 hover:bg-neutral-800/40 transition-all cursor-pointer';
-                        row.onclick = () => window.location.href = `/movie/${movie.slug}`;
-                        row.innerHTML = `
-                            <div class="w-24 md:w-32 aspect-video rounded-xl overflow-hidden shrink-0 border border-neutral-800">
-                                <img src="${movie.poster}" class="w-full h-full object-cover">
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <h3 class="text-white font-medium truncate mb-1 group-hover:text-cyan-400 transition-colors">${movie.title}</h3>
-                                <div class="flex flex-wrap items-center gap-3 text-[10px] md:text-xs text-neutral-500">
-                                     <span class="flex items-center gap-1"><iconify-icon icon="solar:clock-circle-linear"></iconify-icon> ${timeStr}</span>
-                                     <span class="w-1 h-1 rounded-full bg-neutral-700"></span>
-                                     <span class="text-cyan-500 font-medium">Tiến độ: ${Math.floor(item.timestamp / 60)} phút</span>
-                                </div>
-                            </div>
-                            <button onclick="deleteSingle(event, '${movie._id}')" class="p-2 text-neutral-500 hover:text-rose-500 hover:bg-rose-500/10 rounded-lg transition-all opacity-0 group-hover:opacity-100">
-                                 <iconify-icon icon="solar:close-circle-linear" class="text-xl"></iconify-icon>
-                            </button>
-                        `;
-                        container.appendChild(row);
-                    });
-                } else {
-                    document.getElementById('emptyState').classList.remove('hidden');
-                }
+                const apiHistory = res.success && Array.isArray(res.data) ? res.data : [];
+                const localHistory = getLocalWatchHistory();
+                renderHistoryEntries(apiHistory.length > 0 ? apiHistory : localHistory);
             } catch (err) { console.error(err); }
         });
 
@@ -236,10 +287,15 @@
             try {
                 const res = await apiRequest('/history/clear', { method: 'DELETE' });
                 if (res.success) {
-                    showToast('Đã xóa toàn bộ lịch sử', 'success');
+                    showToast(res.message || 'Đã xóa toàn bộ lịch sử', 'success');
                     setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    showToast('Lỗi: ' + (res.message || 'Không thể xóa lịch sử'), 'error');
                 }
-            } catch (err) { console.error(err); }
+            } catch (err) { 
+                console.error('Clear history error:', err); 
+                showToast('Lỗi: Không thể xóa lịch sử. Vui lòng thử lại sau.', 'error');
+            }
         }
 
         function showToast(message, type = 'success') {

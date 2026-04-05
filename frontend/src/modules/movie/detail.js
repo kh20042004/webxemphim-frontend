@@ -20,6 +20,79 @@ document.addEventListener('DOMContentLoaded', async () => {
     let currentMovieData = null;
     let currentEpisodeIndex = 0; // Lưu vết tập đang chiếu
 
+    // Lưu progress xem phim lên server
+    async function saveWatchProgress(currentTimeSeconds) {
+        if (!currentMovieData || !currentMovieData._id) return;
+        
+        const historyData = {
+            movieId: currentMovieData._id,
+            timestamp: Math.floor(currentTimeSeconds) // Lưu theo giây
+        };
+        
+        try {
+            if (typeof window.API?.saveWatchHistory === 'function') {
+                await window.API.saveWatchHistory(historyData);
+                console.log(`✅ Đã lưu progress: ${currentTimeSeconds}s`);
+            }
+        } catch (error) {
+            console.warn('⚠️ Lỗi lưu progress:', error);
+        }
+    }
+
+    // Xử lý khi video kết thúc
+    function onVideoEnded() {
+        console.log('🎬 Video đã kết thúc');
+        
+        // Save final progress
+        if (currentMovieData) {
+            const videoElement = document.getElementById('moviePlayer');
+            const finalTime = Math.floor(videoElement.duration || 0);
+            saveWatchProgress(finalTime);
+        }
+        
+        // Auto next episode nếu có
+        if (currentMovieData && currentMovieData.episodes) {
+            const nextIndex = currentEpisodeIndex + 1;
+            if (nextIndex < currentMovieData.episodes.length) {
+                console.log(`🎬 Tự động chuyển tập ${nextIndex + 1}`);
+                setTimeout(() => playEpisode(nextIndex), 2000);
+            }
+        }
+    }
+
+    async function trackWatchHistory(movieData) {
+        if (!movieData || !movieData._id) return;
+
+        const historyEntry = {
+            movieId: movieData._id,
+            movieTitle: movieData.title || '',
+            moviePoster: movieData.poster || movieData.thumbnail || '',
+            movieCategory: movieData.category || '',
+            movieType: movieData.type || '',
+            movieYear: movieData.year || '',
+            timestamp: 0,
+            episodeIndex: currentEpisodeIndex,
+            updatedAt: new Date().toISOString(),
+        };
+
+        try {
+            if (typeof window.API?.saveWatchHistory === 'function') {
+                await window.API.saveWatchHistory(historyEntry);
+            }
+        } catch (error) {
+            console.warn('⚠️ Không thể lưu lịch sử lên API, sẽ dùng cache cục bộ:', error);
+        }
+
+        try {
+            const cachedHistory = JSON.parse(localStorage.getItem('watchHistoryCache') || '[]');
+            const nextHistory = cachedHistory.filter((item) => item.movieId !== movieData._id);
+            nextHistory.unshift(historyEntry);
+            localStorage.setItem('watchHistoryCache', JSON.stringify(nextHistory.slice(0, 50)));
+        } catch (error) {
+            console.warn('⚠️ Không thể lưu cache lịch sử cục bộ:', error);
+        }
+    }
+
     try {
         // 2. Gọi API lấy dữ liệu
         const response = await window.API.getMovieDetails(movieId);
@@ -52,6 +125,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 5. Load trạng thái yêu thích
         loadFavoriteStatus();
 
+        // 6. Lưu lịch sử xem phim để trang history.html hiển thị được dữ liệu
+        await trackWatchHistory(currentMovieData);
+
     } catch (error) {
         console.error('Lỗi khi tải phim:', error);
         movieTitle.textContent = 'Lỗi tải thông tin phim';
@@ -78,9 +154,85 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         currentEpisodeIndex = index;
         const episode = currentMovieData.episodes[index];
+        const videoUrl = episode.videoUrl;
 
-        // Đổi link video
-        moviePlayer.src = episode.videoUrl;
+        console.log('🎬 Phát video:', videoUrl);
+
+        // Detect loại video để chọn player phù hợp
+        if (isYouTubeUrl(videoUrl)) {
+            // YouTube - dùng iframe
+            playYouTubeVideo(videoUrl);
+        } else {
+            // Direct video file - dùng HTML5 video
+            playDirectVideo(videoUrl);
+        }
+
+        // Cập nhật CSS cho nút (Tô màu nút đang chiếu)
+        const allBtns = document.querySelectorAll('.episode-btn');
+        allBtns.forEach(btn => btn.classList.remove('active'));
+        if(allBtns[index]) {
+            allBtns[index].classList.add('active');
+        }
+    }
+
+    // Kiểm tra có phải YouTube URL không
+    function isYouTubeUrl(url) {
+        return url.includes('youtube.com') || url.includes('youtu.be');
+    }
+
+    // Phát YouTube video qua iframe
+    function playYouTubeVideo(url) {
+        const moviePlayer = document.getElementById('moviePlayer');
+        const youtubePlayer = document.getElementById('youtubePlayer');
+        
+        // Ẩn HTML5 player, hiện YouTube iframe
+        moviePlayer.style.display = 'none';
+        youtubePlayer.style.display = 'block';
+        
+        // Convert YouTube watch URL sang embed URL
+        const embedUrl = convertToYouTubeEmbed(url);
+        youtubePlayer.src = embedUrl;
+        
+        // Setup tracking cho YouTube (periodic save vì iframe không thể track progress)
+        setupYouTubeTracking();
+        
+        console.log('📺 YouTube embed URL:', embedUrl);
+    }
+
+    // Setup tracking cho YouTube iframe (periodic save)
+    function setupYouTubeTracking() {
+        // Clear previous interval
+        if (window.youtubeTrackingInterval) {
+            clearInterval(window.youtubeTrackingInterval);
+        }
+        
+        // Save progress mỗi 30s khi đang xem YouTube
+        let progressSeconds = 0;
+        window.youtubeTrackingInterval = setInterval(() => {
+            if (document.getElementById('youtubePlayer').style.display !== 'none') {
+                progressSeconds += 30; // Tăng 30s mỗi interval
+                saveWatchProgress(progressSeconds);
+                console.log(`💾 Lưu progress YouTube: ${progressSeconds}s (ước tính)`);
+            }
+        }, 30000); // Mỗi 30s
+        
+        console.log('✅ Đã setup tracking cho YouTube video');
+    }
+
+    // Phát direct video qua HTML5
+    function playDirectVideo(url) {
+        const moviePlayer = document.getElementById('moviePlayer');
+        const youtubePlayer = document.getElementById('youtubePlayer');
+        
+        // Ẩn YouTube iframe, hiện HTML5 player
+        youtubePlayer.style.display = 'none';
+        moviePlayer.style.display = 'block';
+        
+        // Set video source
+        moviePlayer.src = url;
+        
+        // Thêm event listeners cho HTML5 video
+        setupHTML5VideoTracking(moviePlayer);
         
         // Thử phát video - nhưng catch error nếu user chưa interact với page
         const playPromise = moviePlayer.play();
@@ -90,13 +242,53 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Không cần handle - video player có nút play manual
             });
         }
+    }
 
-        // Cập nhật CSS cho nút (Tô màu nút đang chiếu)
-        const allBtns = document.querySelectorAll('.episode-btn');
-        allBtns.forEach(btn => btn.classList.remove('active'));
-        if(allBtns[index]) {
-            allBtns[index].classList.add('active');
+    // Setup tracking cho HTML5 video
+    function setupHTML5VideoTracking(videoElement) {
+        // Xóa listeners cũ nếu có
+        videoElement.removeEventListener('timeupdate', saveProgressHTML5);
+        videoElement.removeEventListener('ended', onVideoEnded);
+        
+        // Thêm listeners mới
+        videoElement.addEventListener('timeupdate', saveProgressHTML5);
+        videoElement.addEventListener('ended', onVideoEnded);
+        
+        console.log('✅ Đã setup tracking cho HTML5 video');
+    }
+
+    // Lưu progress cho HTML5 video
+    function saveProgressHTML5() {
+        if (!currentMovieData) return;
+        
+        const videoElement = document.getElementById('moviePlayer');
+        const currentTime = Math.floor(videoElement.currentTime || 0);
+        const duration = Math.floor(videoElement.duration || 0);
+        
+        // Chỉ save khi video đã load và có progress
+        if (currentTime > 0 && duration > 30) {
+            saveWatchProgress(currentTime);
+            console.log(`💾 Lưu progress HTML5: ${currentTime}/${duration}s`);
         }
+    }
+
+    // Convert YouTube watch URL sang embed URL
+    function convertToYouTubeEmbed(url) {
+        // Regex để extract video ID từ nhiều format YouTube URLs
+        const regexPatterns = [
+            /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+            /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/
+        ];
+        
+        for (const regex of regexPatterns) {
+            const match = url.match(regex);
+            if (match && match[1]) {
+                return `https://www.youtube.com/embed/${match[1]}?autoplay=1&rel=0`;
+            }
+        }
+        
+        // Nếu không match, trả về URL gốc (có thể đã là embed URL)
+        return url;
     }
 
     // 5. Tính năng xịn: Tự động chuyển tập tiếp theo khi xem hết video
@@ -202,4 +394,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
         console.warn('⚠️ Module comments.js chưa được load');
     }
+
+    // Cleanup khi rời khỏi trang
+    window.addEventListener('beforeunload', () => {
+        // Clear YouTube tracking interval
+        if (window.youtubeTrackingInterval) {
+            clearInterval(window.youtubeTrackingInterval);
+        }
+        
+        // Save final progress nếu đang xem
+        if (currentMovieData) {
+            const videoElement = document.getElementById('moviePlayer');
+            if (videoElement && videoElement.currentTime > 0) {
+                // Sync call để đảm bảo save được trước khi trang đóng
+                navigator.sendBeacon('/api/history', JSON.stringify({
+                    movieId: currentMovieData._id,
+                    timestamp: Math.floor(videoElement.currentTime)
+                }));
+            }
+        }
+        
+        console.log('🧹 Cleanup completed');
+    });
 });

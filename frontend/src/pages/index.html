@@ -186,8 +186,24 @@
       document.getElementById('modalYear').textContent = movie.year || 'Chưa cập nhật';
       document.getElementById('modalCategory').textContent = movie.category || 'Chưa cập nhật';
       
-      // Hiển thị loại phim (Phim Lẻ hay Phim Bộ)
-      const movieType = movie.type === 'phim_le' ? 'Phim Lẻ' : (movie.type === 'phim_bo' ? 'Phim Bộ' : 'Chưa xác định');
+      // Hiển thị loại phim - Hỗ trợ tất cả loại từ Movie model
+      function getMovieTypeDisplay(type) {
+        const typeMap = {
+          // Format tiếng Việt (hiển thị trực tiếp)
+          'Phim lẻ': 'Phim lẻ',
+          'Phim bộ': 'Phim bộ', 
+          'TV Show': 'TV Show',
+          'Hoạt hình': 'Hoạt hình',
+          // Format cũ (convert sang hiển thị)
+          'phim_le': 'Phim lẻ',
+          'phim_bo': 'Phim bộ',
+          'phim_bo_viet': 'Phim bộ Việt',
+          'hoat_hinh': 'Hoạt hình',
+          'tv_show': 'TV Show'
+        };
+        return typeMap[type] || type || 'Chưa phân loại';
+      }
+      const movieType = getMovieTypeDisplay(movie.type);
       document.getElementById('modalType').textContent = movieType;
 
       // Lấy đánh giá từ dữ liệu phim
