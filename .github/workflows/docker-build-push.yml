@@ -1,0 +1,96 @@
+# Tên workflow (quy trình tự động)
+name: 🎨 Build and Push Frontend to Docker Hub
+
+# Kích hoạt workflow khi nào?
+on:
+  # Khi bạn push code lên nhánh develop hoặc main
+  push:
+    branches: [ develop, main ]
+  # Khi bạn tạo pull request vào nhánh develop hoặc main
+  pull_request:
+    branches: [ develop, main ]
+
+# Biến môi trường (sử dụng trong suốt workflow)
+env:
+  # Tên image Docker frontend (lấy từ secrets)
+  DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/webxemphim-frontend
+
+jobs:
+  # Công việc chính: Build (xây dựng) và Push (đẩy) Docker image
+  build-and-push:
+    # Chạy trên máy Ubuntu mới nhất
+    runs-on: ubuntu-latest
+    
+    # Các bước thực hiện
+    steps:
+    # Bước 1: Lấy code từ repository
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    # Bước 2: Cài đặt Node.js phiên bản 18
+    - name: 🟢 Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'  # Cache npm packages để chạy nhanh hơn
+        
+    # Bước 3: Cài đặt các packages cần thiết (npm ci = clean install)
+    - name: 📦 Install dependencies
+      run: npm ci
+      
+    # Bước 4: Chạy test nếu có (optional = nếu có)
+    - name: 🧪 Run tests (if available)
+      run: npm test --if-present
+      
+    # Bước 5: Chuẩn bị Docker Buildx (công cụ build Docker)
+    - name: 🔧 Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    # Bước 6: Đăng nhập vào Docker Hub
+    - name: 🔐 Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_TOKEN }}
+        
+    # Bước 7: Lấy metadata (thông tin về nhánh, phiên bản, etc)
+    - name: 🏷️ Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.DOCKER_IMAGE }}
+        tags: |
+          # Tag theo tên nhánh (develop, main)
+          type=ref,event=branch
+          # Tag theo số pull request
+          type=ref,event=pr
+          # Tag "latest" cho nhánh chính (main)
+          type=raw,value=latest,enable={{is_default_branch}}
+          # Tag theo commit hash
+          type=sha,prefix={{branch}}-
+          
+    # Bước 8: Build (xây dựng) và Push (đẩy) Docker image lên Docker Hub
+    - name: 🐳 Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .  # Folder chứa Dockerfile
+        platforms: linux/amd64  # Kiến trúc máy
+        push: true  # Đẩy lên Docker Hub
+        tags: ${{ steps.meta.outputs.tags }}  # Các tag của image
+        labels: ${{ steps.meta.outputs.labels }}  # Các nhãn của image
+        cache-from: type=gha  # Sử dụng cache từ GitHub Actions
+        cache-to: type=gha,mode=max  # Lưu cache để lần sau nhanh hơn
+        
+    # Bước 9: Hiển thị thông báo thành công
+    - name: 📝 Image digest
+      run: |
+        echo "### 🎉 Frontend Docker Image Built Successfully!" >> $GITHUB_STEP_SUMMARY
+        echo "**Repository:** \`${{ env.DOCKER_IMAGE }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "**Tags:** \`${{ steps.meta.outputs.tags }}\`" >> $GITHUB_STEP_SUMMARY
+        
+    # Bước 10: Thông báo khi push lên nhánh main (production)
+    - name: 🚀 Deploy notification
+      if: github.ref == 'refs/heads/main'  # Chỉ chạy khi push vào nhánh main
+      run: |
+        echo "🎯 Frontend ready for production deployment!"
+        echo "Pull command: docker pull ${{ env.DOCKER_IMAGE }}:latest"
