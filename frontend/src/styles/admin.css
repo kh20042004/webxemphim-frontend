@@ -2,6 +2,33 @@
    ADMIN PAGE STYLES
    ============================================ */
 
+/* Thiết kế Select Dropdown */
+select {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--fg-text);
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Dropdown options */
+select option {
+    background-color: #2a2a3e;
+    color: var(--fg-text);
+    padding: 8px;
+}
+
+select option:hover,
+select option:checked {
+    background-color: var(--primary-color);
+}
+
 /* Thiết kế Bảng (Table) */
 .overflow-x-auto {
     overflow-x: auto;

@@ -1,0 +1,33 @@
+# ==============================================================================
+# DOCKER COMPOSE CHO FRONTEND (RIÊNG BIỆT)
+# ==============================================================================
+# File này chỉ chạy frontend, không phụ thuộc vào backend
+# Backend sẽ có docker-compose.yml riêng
+
+version: '3.8'
+
+services:
+  # ============================================
+  # FRONTEND - Nginx serving static files
+  # ============================================
+  frontend:
+    # Tên container
+    container_name: webxemphim-frontend
+    
+    # Build từ Dockerfile trong thư mục hiện tại
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    # Ánh xạ port: host:container
+    # Truy cập frontend qua http://localhost:8000
+    ports:
+      - "8000:8000"
+    
+    # Biến môi trường (nếu cần)
+    environment:
+      # URL backend API (để frontend gọi API)
+      - API_URL=http://localhost:5000
+    
+    # Restart policy - tự động khởi động lại khi crash
+    restart: unless-stopped

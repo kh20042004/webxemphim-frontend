@@ -1,0 +1,27 @@
+# ==============================================================================
+# .DOCKERIGNORE CHO FRONTEND
+# ==============================================================================
+# File này liệt kê những file/folder KHÔNG copy vào Docker image
+
+# Git files
+.git
+.gitignore
+
+# IDE/Editor files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+README.md
+docs
+
+# Docker files
+Dockerfile
+.dockerignore
+docker-compose.yml

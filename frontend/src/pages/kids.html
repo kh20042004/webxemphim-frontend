@@ -584,15 +584,19 @@
             try {
                 console.log('📡 Đang tải phim thiếu nhi...');
 
-                // Try to get animation movies which are typically for kids
-                const [animationResponse, familyResponse] = await Promise.all([
-                    API.getMovies({ type: 'Hoạt hình', limit: 30 }),
-                    API.getMovies({ category: 'Gia đình', limit: 30 })
+                // Lấy phim thiếu nhi theo category
+                const [animationResponse, familyResponse, adventureResponse, comedyResponse] = await Promise.all([
+                    API.getMovies({ category: 'Hoạt hình', limit: 30 }),
+                    API.getMovies({ category: 'Gia đình', limit: 30 }),
+                    API.getMovies({ category: 'Phiêu lưu', limit: 30 }),
+                    API.getMovies({ category: 'Hài', limit: 30 })
                 ]);
 
                 const allMovies = [
                     ...(animationResponse?.data || []),
-                    ...(familyResponse?.data || [])
+                    ...(familyResponse?.data || []),
+                    ...(adventureResponse?.data || []),
+                    ...(comedyResponse?.data || [])
                 ];
                 
                 const uniqueMovies = [];

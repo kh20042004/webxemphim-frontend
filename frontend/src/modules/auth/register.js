@@ -136,8 +136,9 @@ registerForm.addEventListener('submit', async (e) => {
             passwordConfirm: confirmPassword,
         });
 
-        if (response && response.success && response.data && response.data.token) {
-            // ✅ Hiển thị thông báo thành công
+        // ✅ Kiểm tra đăng ký thành công (backend trả về accessToken)
+        if (response && response.success && response.data && response.data.accessToken) {
+            // ✅ Hiển thị thông báo thành công với toast
             window.showToast('Đăng ký thành công! Đang chuyển sang trang đăng nhập...', 'success', 2000);
             
             // ✅ Redirect sang trang login sau 1.5 giây
@@ -145,13 +146,14 @@ registerForm.addEventListener('submit', async (e) => {
                 window.location.href = './login.html';
             }, 1500);
         } else if (response && response.message) {
-            // Handle specific error messages
+            // Xử lý lỗi từ backend (email đã tồn tại, v.v.)
             if (response.message.includes('email')) {
                 showError(emailInput, emailError, response.message);
             } else {
                 showError(fullNameInput, fullNameError, response.message);
             }
         } else {
+            // Lỗi không xác định
             showError(fullNameInput, fullNameError, 'Đăng ký thất bại');
         }
     } catch (error) {

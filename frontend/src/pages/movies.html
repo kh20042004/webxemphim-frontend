@@ -835,6 +835,31 @@
                 }
             }
 
+            // Đọc type (định dạng) từ URL (ví dụ: ?type=TV Show)
+            const typeFromUrl = urlParams.get('type');
+            if (typeFromUrl) {
+                const decodedType = decodeURIComponent(typeFromUrl);
+                const typeSelect = document.getElementById('filter-type');
+                if (typeSelect) {
+                    // Thử gán vào select dropdown
+                    typeSelect.value = decodedType;
+                    // Nếu không tìm thấy option khớp, thêm option mới
+                    if (typeSelect.value !== decodedType) {
+                        const newOption = document.createElement('option');
+                        newOption.value = decodedType;
+                        newOption.textContent = decodedType;
+                        typeSelect.appendChild(newOption);
+                        typeSelect.value = decodedType;
+                    }
+                }
+
+                // Cập nhật tiêu đề trang
+                const pageTitle = document.querySelector('h1');
+                if (pageTitle) {
+                    pageTitle.textContent = decodedType.toUpperCase();
+                }
+            }
+
             // Gọi loadMovies() sau khi đã điền tất cả filter từ URL
             loadMovies();
         };

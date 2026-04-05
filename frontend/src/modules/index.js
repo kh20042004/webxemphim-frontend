@@ -54,7 +54,7 @@ async function loadMovies() {
       // Chọn từ 1-5 phim (những phim sau phim featured)
       heroThumbs.innerHTML = movies.slice(1, 5).map(movie => `
         <a onclick="event.preventDefault(); viewMovie('${movie._id || movie.id}')">
-          <img src="${movie.thumbnail || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%2270%22%3E%3Crect width=%22120%22 height=%2270%22 fill=%22%23333%22/%3E%3C/svg%3E'}" alt="${movie.title}">
+          <img src="${movie.poster || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%2270%22%3E%3Crect width=%22120%22 height=%2270%22 fill=%22%23333%22/%3E%3C/svg%3E'}" alt="${movie.title}">
         </a>
       `).join('');
     }
@@ -67,7 +67,7 @@ async function loadMovies() {
   grid.innerHTML = movies.map(movie => `
     <div class="movie-item" onclick="viewMovie('${movie._id || movie.id}')">
       <!-- Ảnh phim - Click để mở modal -->
-      <img src="${movie.thumbnail || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22180%22 height=%22270%22%3E%3Crect width=%22180%22 height=%22270%22 fill=%22%23333%22/%3E%3C/svg%3E'}" 
+      <img src="${movie.poster || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22180%22 height=%22270%22%3E%3Crect width=%22180%22 height=%22270%22 fill=%22%23333%22/%3E%3C/svg%3E'}" 
            alt="${movie.title}"
            style="cursor: pointer;">
       
@@ -85,16 +85,6 @@ async function loadMovies() {
       </div>
     </div>
   `).join('');
-  
-  // ========== Attach event listeners cho nút yêu thích ==========
-  // Sau khi render HTML, attach click handler cho từng nút favorite
-  document.querySelectorAll('.favorite-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation(); // Ngăn click bubble lên parent
-      const movieId = this.getAttribute('data-movie-id');
-      toggleFavorite(movieId, this);
-    });
-  });
   
   // ========== Load trạng thái yêu thích ==========
   // Nếu user đã đăng nhập, load các phim đã yêu thích
@@ -230,8 +220,8 @@ async function loadFavoriteStatus() {
  * @param {object} movie - Dữ liệu phim
  */
 function updateHero(movie) {
-  // Cập nhật ảnh nền hero (nếu không có thumbnail, dùng grey placeholder)
-  document.getElementById('heroBg').src = movie.thumbnail || '';
+  // Cập nhật ảnh nền hero (nếu không có poster, dùng grey placeholder)
+  document.getElementById('heroBg').src = movie.poster || '';
   
   // Cập nhật tiêu đề phim
   document.getElementById('heroTitle').textContent = movie.title;
